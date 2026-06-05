@@ -542,6 +542,11 @@
         min-width: 600px;
       }
 
+      .bento-card-crm {
+        flex: 1;
+        min-width: 400px;
+      }
+
       .bento-row {
         gap: 24px;
       }
@@ -662,6 +667,12 @@
       .bento-card-wide {
         flex: 2;
         min-width: 800px;
+        height: 600px;
+      }
+
+      .bento-card-crm {
+        flex: 1;
+        min-width: 500px;
         height: 600px;
       }
 
@@ -1431,8 +1442,9 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       width: 100%;
+      height: 100%;
       gap: 40px;
       position: relative;
       z-index: 1;
@@ -1449,6 +1461,7 @@
       max-width: 750px;
       text-align: left;
       flex: 1;
+      height: 100%;
     }
 
     .bento-callout-buttons {
