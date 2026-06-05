@@ -1,0 +1,128 @@
+<svg width="380" height="257" viewBox="0 0 380 257" fill="none" xmlns="http://www.w3.org/2000/svg" style="background: transparent;">
+<style>
+  /* Radar pulse animation - from inner to outer */
+  @keyframes pulseInner {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.03); }
+  }
+  @keyframes pulseMiddle {
+    0%, 100% { opacity: 0.15; transform: scale(1); }
+    50% { opacity: 0.22; transform: scale(1.02); }
+  }
+  @keyframes pulseOuter {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.15; transform: scale(1.01); }
+  }
+
+  /* Shield pulse */
+  @keyframes shieldPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Floating dots - smooth subtle pulse starting from dim */
+  @keyframes dotPulse1 {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.04); }
+  }
+  @keyframes dotPulse2 {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.05); }
+  }
+  @keyframes dotPulse3 {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.03); }
+  }
+  @keyframes dotPulse4 {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.04); }
+  }
+  @keyframes dotPulse5 {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.88; transform: scale(1.03); }
+  }
+
+  .radar-outer {
+    animation: pulseOuter 3.5s ease-in-out infinite;
+    transform-origin: 190px 190px;
+  }
+  .radar-middle {
+    animation: pulseMiddle 3.5s ease-in-out infinite 0.4s;
+    transform-origin: 190px 190px;
+  }
+  .radar-inner {
+    animation: pulseInner 3.5s ease-in-out infinite 0.8s;
+    transform-origin: 190px 190px;
+  }
+
+  .shield-center {
+    animation: shieldPulse 4s ease-in-out infinite;
+    transform-origin: 190px 200px;
+  }
+
+  .dot-1 { animation: dotPulse1 4.5s ease-in-out infinite 0s; transform-origin: 119px 132px; }
+  .dot-2 { animation: dotPulse2 5s ease-in-out infinite 1s; transform-origin: 302px 39px; }
+  .dot-3 { animation: dotPulse3 5.5s ease-in-out infinite 2s; transform-origin: 65px 45px; }
+  .dot-4 { animation: dotPulse4 4.8s ease-in-out infinite 1.5s; transform-origin: 178px 51px; }
+  .dot-5 { animation: dotPulse5 5.2s ease-in-out infinite 2.5s; transform-origin: 294px 103px; }
+</style>
+
+<defs>
+  <linearGradient id="paint0_linear" x1="190" y1="0" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F4EC7"/>
+    <stop offset="0.701549" stop-color="#2F4EC7" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="paint1_linear" x1="190" y1="51.0625" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F4EC7"/>
+    <stop offset="0.855371" stop-color="#2F4EC7" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="paint2_linear" x1="189.999" y1="95.3955" x2="189.999" y2="190" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F4EC7"/>
+    <stop offset="1" stop-color="#2F4EC7" stop-opacity="0"/>
+  </linearGradient>
+</defs>
+
+<!-- Radar waves background -->
+<circle class="radar-outer" cx="190" cy="190" r="190" fill="url(#paint0_linear)"/>
+<rect class="radar-middle" x="51.0625" y="51.0625" width="277.875" height="277.875" rx="138.938" fill="url(#paint1_linear)"/>
+<rect class="radar-inner" x="95.3945" y="95.3955" width="189.208" height="189.208" rx="94.6042" fill="url(#paint2_linear)"/>
+
+<!-- Shield center -->
+<g class="shield-center">
+  <rect x="160" y="170" width="60" height="60" rx="30" fill="#2F4EC7" fill-opacity="0.6"/>
+  <rect x="160.5" y="170.5" width="59" height="59" rx="29.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <path d="M203.75 184.875H176.25C175.521 184.875 174.821 185.165 174.305 185.68C173.79 186.196 173.5 186.896 173.5 187.625V197.25C173.5 206.311 177.886 211.803 181.566 214.814C185.53 218.055 189.472 219.157 189.644 219.202C189.881 219.266 190.13 219.266 190.366 219.202C190.538 219.157 194.476 218.055 198.444 214.814C202.114 211.803 206.5 206.311 206.5 197.25V187.625C206.5 186.896 206.21 186.196 205.695 185.68C205.179 185.165 204.479 184.875 203.75 184.875ZM190 216.435C187.568 215.586 185.304 214.317 183.311 212.686C179.315 209.417 177.001 205.156 176.405 200H190V187.625H203.75V197.25C203.751 198.169 203.699 199.087 203.595 200H190V216.435Z" fill="white"/>
+</g>
+
+<!-- Floating dots -->
+<g class="dot-1">
+  <rect x="107" y="120" width="24" height="24" rx="12" fill="white" fill-opacity="0.3"/>
+  <rect x="107.5" y="120.5" width="23" height="23" rx="11.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <circle cx="119" cy="132" r="8" fill="#2F4EC7"/>
+</g>
+
+<g class="dot-2">
+  <rect x="290" y="27" width="24" height="24" rx="12" fill="white" fill-opacity="0.3"/>
+  <rect x="290.5" y="27.5" width="23" height="23" rx="11.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <circle cx="302" cy="39" r="8" fill="#2F4EC7"/>
+</g>
+
+<g class="dot-3">
+  <rect x="53" y="33" width="24" height="24" rx="12" fill="white" fill-opacity="0.3"/>
+  <rect x="53.5" y="33.5" width="23" height="23" rx="11.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <circle cx="65" cy="45" r="8" fill="#2F4EC7"/>
+</g>
+
+<g class="dot-4">
+  <rect x="166" y="39" width="24" height="24" rx="12" fill="white" fill-opacity="0.3"/>
+  <rect x="166.5" y="39.5" width="23" height="23" rx="11.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <circle cx="178" cy="51" r="8" fill="#2F4EC7"/>
+</g>
+
+<g class="dot-5">
+  <rect x="282" y="91" width="24" height="24" rx="12" fill="white" fill-opacity="0.3"/>
+  <rect x="282.5" y="91.5" width="23" height="23" rx="11.5" stroke="#2F4EC7" stroke-opacity="0.3"/>
+  <circle cx="294" cy="103" r="8" fill="#2F4EC7"/>
+</g>
+
+</svg>

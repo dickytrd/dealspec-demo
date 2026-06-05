@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Management Component</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: transparent;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Component wrapper for responsive scaling */
+    .document-management-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 16px;
+    }
+
+    @media (max-width: 440px) {
+      .document-management-wrapper {
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .document-management-wrapper {
+        padding: 8px;
+      }
+    }
+
+    /* Main container - pixel-perfect from Figma, responsive via width */
+    .document-management {
+      --card-scale: 1;
+
+      background: #ffffff;
+      border-radius: calc(16px * var(--card-scale));
+      padding: calc(16px * var(--card-scale));
+      box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: calc(16px * var(--card-scale));
+      /* Responsive: fit inside parent, max 519px */
+      width: min(100%, calc(519px * var(--card-scale)));
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    /* Header row */
+    .doc-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .doc-header__title {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 500;
+      font-size: calc(20px * var(--card-scale));
+      line-height: 1.4;
+      color: #070c11;
+      letter-spacing: -0.2px;
+    }
+
+    /* Search input */
+    .doc-search {
+      background: #f9fbfc;
+      border-radius: calc(8px * var(--card-scale));
+      padding: calc(6px * var(--card-scale)) calc(8px * var(--card-scale));
+      display: flex;
+      align-items: center;
+      gap: calc(10px * var(--card-scale));
+      width: calc(200px * var(--card-scale));
+    }
+
+    .doc-search__icon {
+      width: calc(16px * var(--card-scale));
+      height: calc(16px * var(--card-scale));
+      flex-shrink: 0;
+    }
+
+    .doc-search__icon img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .doc-search__placeholder {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 400;
+      font-size: calc(14px * var(--card-scale));
+      line-height: 1.4;
+      color: rgba(7, 12, 17, 0.3);
+      letter-spacing: -0.14px;
+    }
+
+    /* Cards list */
+    .doc-cards {
+      display: flex;
+      flex-direction: column;
+      gap: calc(16px * var(--card-scale));
+    }
+
+    /* Individual document card */
+    .doc-card {
+      background: #f5f5f5;
+      border: 1px solid rgba(7, 12, 17, 0.1);
+      border-radius: calc(12px * var(--card-scale));
+      padding: calc(12px * var(--card-scale));
+      display: flex;
+      align-items: center;
+      gap: calc(12px * var(--card-scale));
+      width: 100%;
+      transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease;
+    }
+
+    .doc-card:hover {
+      background: #ffffff;
+    }
+
+    /* Card rotations */
+    .doc-card--word {
+      transform: rotate(0deg);
+    }
+
+    .doc-card--ppt {
+      transform: rotate(2deg);
+    }
+
+    .doc-card--excel {
+      transform: rotate(-1deg);
+    }
+
+    /* Hover animation - cards straighten */
+    .document-management:hover .doc-card--ppt {
+      transform: rotate(0deg);
+    }
+
+    .document-management:hover .doc-card--excel {
+      transform: rotate(0deg);
+    }
+
+    /* Checkbox */
+    .doc-card__checkbox {
+      width: calc(18px * var(--card-scale));
+      height: calc(18px * var(--card-scale));
+      border: 1px solid rgba(7, 12, 17, 0.3);
+      border-radius: calc(4px * var(--card-scale));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .doc-card__checkbox svg {
+      width: calc(12px * var(--card-scale));
+      height: calc(12px * var(--card-scale));
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .doc-card:hover .doc-card__checkbox {
+      background: #2F6FEB;
+      border-color: #2F6FEB;
+    }
+
+    .doc-card:hover .doc-card__checkbox svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Card content layout */
+    .doc-card__content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    /* Left side: icon + info */
+    .doc-card__left {
+      display: flex;
+      align-items: flex-start;
+      gap: calc(8px * var(--card-scale));
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* File icon */
+    .doc-card__icon {
+      width: calc(40px * var(--card-scale));
+      height: calc(40px * var(--card-scale));
+      border-radius: calc(8px * var(--card-scale));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .doc-card__icon--word {
+      background: rgba(0, 13, 255, 0.2);
+    }
+
+    .doc-card__icon--ppt {
+      background: rgba(255, 106, 0, 0.2);
+    }
+
+    .doc-card__icon--excel {
+      background: rgba(15, 168, 48, 0.2);
+    }
+
+    .doc-card__icon img {
+      width: calc(24px * var(--card-scale));
+      height: calc(24px * var(--card-scale));
+    }
+
+    /* File info */
+    .doc-card__info {
+      display: flex;
+      flex-direction: column;
+      gap: calc(2px * var(--card-scale));
+      min-width: 0;
+      flex: 1;
+    }
+
+    .doc-card__filename {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 500;
+      font-size: calc(16px * var(--card-scale));
+      line-height: 1.4;
+      color: #070c11;
+      letter-spacing: -0.16px;
+      max-width: calc(200px * var(--card-scale));
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .doc-card__date {
+      display: flex;
+      gap: calc(4px * var(--card-scale));
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 400;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1.4;
+      color: rgba(7, 12, 17, 0.6);
+      letter-spacing: -0.12px;
+    }
+
+    /* Right side: badge + size */
+    .doc-card__right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: calc(4px * var(--card-scale));
+      flex-shrink: 0;
+    }
+
+    /* Badge */
+    .doc-card__badge {
+      padding: calc(4px * var(--card-scale)) calc(8px * var(--card-scale));
+      border-radius: calc(4px * var(--card-scale));
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 500;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1.4;
+      letter-spacing: -0.12px;
+      white-space: nowrap;
+    }
+
+    .doc-card__badge--word {
+      background: rgba(0, 13, 255, 0.2);
+      color: #000dff;
+    }
+
+    .doc-card__badge--ppt {
+      background: rgba(255, 106, 0, 0.2);
+      color: #ff6a00;
+    }
+
+    .doc-card__badge--excel {
+      background: rgba(15, 168, 48, 0.2);
+      color: #0fa830;
+    }
+
+    /* File size */
+    .doc-card__size {
+      display: flex;
+      gap: calc(4px * var(--card-scale));
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-weight: 400;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1.4;
+      color: rgba(7, 12, 17, 0.6);
+      letter-spacing: -0.12px;
+    }
+
+    /* Responsive scaling - keep ALL content visible, just scale down */
+    @media (max-width: 560px) {
+      .document-management {
+        --card-scale: 0.9;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .document-management {
+        --card-scale: 0.8;
+      }
+    }
+
+    @media (max-width: 440px) {
+      .document-management {
+        --card-scale: 0.7;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .document-management {
+        --card-scale: 0.6;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .document-management {
+        --card-scale: 0.55;
+      }
+    }
+
+    @media (max-width: 300px) {
+      .document-management {
+        --card-scale: 0.5;
+      }
+    }
+
+    /* Icon-specific scaling for mobile */
+    @media (max-width: 440px) {
+      .doc-search__icon,
+      .doc-search__icon svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .doc-card__icon {
+        width: calc(36px * var(--card-scale));
+        height: calc(36px * var(--card-scale));
+      }
+
+      .doc-card__icon img,
+      .doc-card__icon svg {
+        width: calc(22px * var(--card-scale));
+        height: calc(22px * var(--card-scale));
+      }
+    }
+
+    @media (max-width: 380px) {
+      .doc-search__icon,
+      .doc-search__icon svg {
+        width: 10px;
+        height: 10px;
+      }
+
+      .doc-card__icon {
+        width: calc(34px * var(--card-scale));
+        height: calc(34px * var(--card-scale));
+      }
+
+      .doc-card__icon img,
+      .doc-card__icon svg {
+        width: calc(20px * var(--card-scale));
+        height: calc(20px * var(--card-scale));
+      }
+    }
+
+    @media (max-width: 340px) {
+      .doc-search__icon,
+      .doc-search__icon svg {
+        width: 9px;
+        height: 9px;
+      }
+
+      .doc-card__icon {
+        width: calc(32px * var(--card-scale));
+        height: calc(32px * var(--card-scale));
+      }
+
+      .doc-card__icon img,
+      .doc-card__icon svg {
+        width: calc(18px * var(--card-scale));
+        height: calc(18px * var(--card-scale));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="document-management-wrapper">
+    <div class="document-management">
+      <!-- Header -->
+      <div class="doc-header">
+        <span class="doc-header__title">All Request</span>
+        <div class="doc-search">
+          <div class="doc-search__icon">
+            <!-- Search icon SVG inline -->
+            <svg width="100%" height="100%" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="7" r="5.5" stroke="rgba(7,12,17,0.3)" stroke-width="1.2"></circle>
+              <path d="M11 11L14 14" stroke="rgba(7,12,17,0.3)" stroke-width="1.2" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <span class="doc-search__placeholder">Search files...</span>
+        </div>
+      </div>
+
+      <!-- Document cards -->
+      <div class="doc-cards">
+        <!-- Card 1: Word Document -->
+        <div class="doc-card doc-card--word">
+          <div class="doc-card__checkbox">
+            <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="doc-card__content">
+            <div class="doc-card__left">
+              <div class="doc-card__icon doc-card__icon--word">
+                <!-- Word document icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2H6Z" fill="#000DFF" fill-opacity="0.3"></path>
+                  <path d="M13 2V8H20" fill="#000DFF" fill-opacity="0.2"></path>
+                  <path d="M13 2L20 8" stroke="#000DFF" stroke-opacity="0.8" stroke-width="0.5"></path>
+                  <path d="M8 13H16M8 16H13" stroke="#000DFF" stroke-width="1.2" stroke-linecap="round"></path>
+                </svg>
+              </div>
+              <div class="doc-card__info">
+                <span class="doc-card__filename">Board Meeting Minutes.docx</span>
+                <div class="doc-card__date">
+                  <span>Last Edit •</span>
+                  <span>26.03.2024 - 11:15</span>
+                </div>
+              </div>
+            </div>
+            <div class="doc-card__right">
+              <div class="doc-card__badge doc-card__badge--word">Word Document</div>
+              <div class="doc-card__size">
+                <span>Size File •</span>
+                <span>1.5 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: PowerPoint (rotated 2deg) -->
+        <div class="doc-card doc-card--ppt">
+          <div class="doc-card__checkbox">
+            <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="doc-card__content">
+            <div class="doc-card__left">
+              <div class="doc-card__icon doc-card__icon--ppt">
+                <!-- PowerPoint icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2H6Z" fill="#FF6A00" fill-opacity="0.3"></path>
+                  <path d="M13 2V8H20" fill="#FF6A00" fill-opacity="0.2"></path>
+                  <path d="M13 2L20 8" stroke="#FF6A00" stroke-opacity="0.8" stroke-width="0.5"></path>
+                  <rect x="7" y="11" width="10" height="7" rx="1" stroke="#FF6A00" stroke-width="1.2"></rect>
+                </svg>
+              </div>
+              <div class="doc-card__info">
+                <span class="doc-card__filename">Competitor Analysis.pptx</span>
+                <div class="doc-card__date">
+                  <span>Last Edit •</span>
+                  <span>24.03.2024 - 14:10</span>
+                </div>
+              </div>
+            </div>
+            <div class="doc-card__right">
+              <div class="doc-card__badge doc-card__badge--ppt">Power Point</div>
+              <div class="doc-card__size">
+                <span>Size File •</span>
+                <span>5.6 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Excel (rotated -1deg) -->
+        <div class="doc-card doc-card--excel">
+          <div class="doc-card__checkbox">
+            <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="doc-card__content">
+            <div class="doc-card__left">
+              <div class="doc-card__icon doc-card__icon--excel">
+                <!-- Excel icon -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 2C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2H6Z" fill="#0FA830" fill-opacity="0.3"></path>
+                  <path d="M13 2V8H20" fill="#0FA830" fill-opacity="0.2"></path>
+                  <path d="M13 2L20 8" stroke="#0FA830" stroke-opacity="0.8" stroke-width="0.5"></path>
+                  <path d="M8 12H10M14 12H16M8 15H10M14 15H16M8 18H10M14 18H16" stroke="#0FA830" stroke-width="1.2" stroke-linecap="round"></path>
+                  <path d="M12 11V19" stroke="#0FA830" stroke-width="0.8"></path>
+                </svg>
+              </div>
+              <div class="doc-card__info">
+                <span class="doc-card__filename">Due Diligence Checklist.xlsx</span>
+                <div class="doc-card__date">
+                  <span>Last Edit •</span>
+                  <span>25.03.2024 - 13:30</span>
+                </div>
+              </div>
+            </div>
+            <div class="doc-card__right">
+              <div class="doc-card__badge doc-card__badge--excel">Excel Sheet</div>
+              <div class="doc-card__size">
+                <span>Size File •</span>
+                <span>1.2 MB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.body.addEventListener('click', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'bento-card-click' }, '*');
+      }
+    });
+  </script>
+</body></html>

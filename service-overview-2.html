@@ -1,0 +1,1614 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services Overview - Dealspec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #01070e;
+      --bg-light: #fafaf9;
+      --bg-card: #f5f5f5;
+      --fg-dark: #070c11;
+      --fg-muted: rgba(7, 12, 17, 0.5);
+      --fg-muted-60: rgba(7, 12, 17, 0.6);
+      --fg-muted-10: rgba(7, 12, 17, 0.1);
+      --fg-muted-30: rgba(7, 12, 17, 0.3);
+      --white: #ffffff;
+      --white-muted: rgba(255, 255, 255, 0.5);
+      --white-muted-60: rgba(255, 255, 255, 0.6);
+      --white-muted-10: rgba(255, 255, 255, 0.1);
+      --white-muted-05: rgba(255, 255, 255, 0.05);
+      --white-muted-30: rgba(255, 255, 255, 0.3);
+      --accent-blue: rgba(47, 78, 199, 0.1);
+      --font-display: 'Libre Baskerville', Georgia, serif;
+      --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: none;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--fg-dark);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%;
+      max-width: none;
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+       NAVBAR - matching other pages
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: background 300ms ease, backdrop-filter 300ms ease, box-shadow 300ms ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(1, 7, 14, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-container {
+      width: 100%;
+      max-width: 1440px;
+      padding: 0 120px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo {
+      width: 169px;
+      height: 40px;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      opacity: 0.5;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-link svg {
+      width: 7px;
+      height: 3.3px;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-login {
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      text-decoration: none;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ghost {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      padding: 10px 20px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      cursor: pointer;
+    }
+
+    .btn-lang {
+      width: 39px;
+      height: 24px;
+    }
+
+    .btn-lang img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-menu-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
+    }
+
+    /* ========================================
+       HERO SECTION
+       ======================================== */
+    .hero {
+      background: var(--bg-dark);
+      height: 772px;
+      padding-top: 72px;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 80px;
+    }
+
+    .hero-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1;
+    }
+
+    .hero-bg {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      width: 1260px;
+      height: 600px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .hero-bg-lines {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      width: 1260px;
+      height: 1287px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -1.28px;
+      width: 500px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      width: 420px;
+    }
+
+    /* ========================================
+       SECTION BASE
+       ======================================== */
+    .section {
+      background: var(--bg-light);
+      padding: 80px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--fg-dark);
+      letter-spacing: -1.28px;
+      line-height: 1.1;
+      max-width: 800px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      max-width: 660px;
+      margin-top: 8px;
+    }
+
+    /* ========================================
+       BENEFITS SECTION
+       ======================================== */
+    .benefits-grid {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 1200px;
+      justify-content: center;
+    }
+
+    .benefit-card {
+      width: 392px;
+      height: 300px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .benefit-card-dark {
+      background: var(--bg-dark);
+    }
+
+    .benefit-card-dark .benefit-card-bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .benefit-card-light {
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+    }
+
+    .benefit-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--accent-blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .benefit-icon img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .benefit-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .benefit-title {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.24px;
+      line-height: 1.4;
+    }
+
+    .benefit-card-dark .benefit-title {
+      color: var(--white);
+    }
+
+    .benefit-card-light .benefit-title {
+      color: var(--fg-dark);
+    }
+
+    .benefit-desc {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .benefit-card-dark .benefit-desc {
+      color: var(--white-muted-60);
+    }
+
+    .benefit-card-light .benefit-desc {
+      color: var(--fg-muted-60);
+    }
+
+    /* ========================================
+       SERVICES SECTION
+       ======================================== */
+    .services-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .services-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .service-card {
+      flex: 1;
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+      padding: 8px 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow: hidden;
+    }
+
+    .service-image {
+      width: 100%;
+      height: 225px;
+      overflow: hidden;
+    }
+
+    .service-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .service-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 8px;
+    }
+
+    .service-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .service-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    /* ========================================
+       FAQ SECTION
+       ======================================== */
+    .faq-section {
+      background: var(--bg-light);
+      padding: 80px 120px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
+      width: 100%;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--fg-muted-10);
+      padding-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      cursor: pointer;
+    }
+
+    .faq-question-text {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .faq-icon img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .faq-answer {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* ========================================
+       CTA SECTION
+       ======================================== */
+    .cta-section {
+      background: var(--bg-light);
+      padding: 80px 120px 160px;
+      width: 100%;
+    }
+
+    .cta-banner {
+      background: var(--bg-dark);
+      height: 400px;
+      padding: 60px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1200px;
+      height: 400px;
+      backdrop-filter: blur(30px);
+      background: var(--white);
+      border: 1px solid var(--white);
+      overflow: hidden;
+    }
+
+    .cta-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .cta-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -1.28px;
+      line-height: 1.2;
+      max-width: 750px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      padding: 15px 30px;
+      color: var(--fg-dark);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      padding: 15px 30px;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.16px;
+      cursor: pointer;
+    }
+
+    /* ========================================
+       FOOTER - matching other pages
+       ======================================== */
+    .footer {
+      background: var(--bg-dark);
+      padding: 80px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 150px;
+      height: 600px;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .footer-bg {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) scaleY(-1);
+      top: 70px;
+      width: 1260px;
+      height: 600px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .footer-bg-lines {
+      top: -617px;
+      height: 1287px;
+    }
+
+    .footer-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 150px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      width: 169px;
+      height: 40px;
+    }
+
+    .footer-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .footer-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      width: 350px;
+    }
+
+    .footer-newsletter {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-10);
+      border: 1px solid var(--white-muted-30);
+      border-radius: 8px;
+      padding: 4px 4px 4px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 350px;
+    }
+
+    .footer-newsletter-input {
+      flex: 1;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -0.14px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .footer-newsletter-input::placeholder {
+      color: var(--white-muted);
+    }
+
+    .footer-newsletter-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+
+    .footer-newsletter-btn img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 120px;
+    }
+
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-column-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .footer-column-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      display: flex;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-bottom span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    /* ========================================
+       RESPONSIVE STYLES
+       ======================================== */
+
+    /* Tablet Landscape (1024px - 1279px) */
+    @media (max-width: 1279px) {
+      .navbar-container {
+        padding: 0 80px;
+      }
+
+      .hero {
+        height: auto;
+        min-height: 672px;
+        padding-bottom: 60px;
+      }
+
+      .hero-inner {
+        padding: 0 80px;
+      }
+
+      .section {
+        padding: 60px 80px;
+        gap: 60px;
+      }
+
+      .benefits-grid {
+        flex-wrap: wrap;
+      }
+
+      .benefit-card {
+        width: calc(50% - 6px);
+        min-width: 300px;
+      }
+
+      .services-row {
+        flex-wrap: wrap;
+      }
+
+      .service-card {
+        width: calc(50% - 6px);
+        min-width: 280px;
+      }
+
+      .faq-section {
+        padding: 60px 80px 100px;
+      }
+
+      .cta-section {
+        padding: 60px 80px 100px;
+      }
+
+      .footer {
+        padding: 60px 80px;
+        height: auto;
+        min-height: 500px;
+      }
+
+      .footer-links {
+        gap: 60px;
+      }
+    }
+
+    /* Tablet Portrait (768px - 1023px) */
+    @media (max-width: 1023px) {
+      .navbar-container {
+        padding: 0 40px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-divider {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .hero {
+        min-height: 622px;
+        padding-bottom: 60px;
+      }
+
+      .hero-inner {
+        padding: 0 40px;
+      }
+
+      .hero-content {
+        flex-direction: column;
+        gap: 32px;
+        align-items: flex-start;
+      }
+
+      .hero-headline {
+        font-size: 48px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .hero-subtitle {
+        width: 100%;
+        max-width: 420px;
+      }
+
+      .section {
+        padding: 60px 40px;
+        gap: 50px;
+      }
+
+      .section-title {
+        font-size: 48px;
+        letter-spacing: -0.96px;
+      }
+
+      .benefits-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .benefit-card {
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .services-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .service-card {
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .faq-section {
+        padding: 60px 40px 80px;
+      }
+
+      .cta-section {
+        padding: 60px 40px 80px;
+      }
+
+      .cta-banner {
+        height: auto;
+        min-height: 350px;
+        padding: 40px;
+      }
+
+      .cta-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+      }
+
+      .cta-title {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .footer {
+        padding: 60px 40px;
+        height: auto;
+        gap: 60px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer-links {
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Mobile (< 768px) */
+    @media (max-width: 767px) {
+      .navbar {
+        height: 64px;
+      }
+
+      .navbar-container {
+        padding: 0 20px;
+      }
+
+      .hero {
+        min-height: 522px;
+        padding-bottom: 40px;
+      }
+
+      .hero-inner {
+        padding: 0 20px;
+      }
+
+      .logo {
+        width: 120px;
+        height: 28px;
+      }
+
+      .navbar-right {
+        gap: 12px;
+      }
+
+      .nav-login {
+        display: none;
+      }
+
+      .btn-ghost {
+        display: none;
+      }
+
+      .hero-bg,
+      .hero-bg-lines,
+      .footer-bg,
+      .footer-bg-lines {
+        display: none;
+      }
+
+      .hero-headline {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .section {
+        padding: 40px 20px;
+        gap: 40px;
+      }
+
+      .section-label {
+        font-size: 14px;
+      }
+
+      .section-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .section-subtitle {
+        font-size: 14px;
+      }
+
+      .benefit-card {
+        height: auto;
+        min-height: 280px;
+        padding: 24px;
+      }
+
+      .benefit-title {
+        font-size: 20px;
+      }
+
+      .benefit-desc {
+        font-size: 14px;
+      }
+
+      .service-card {
+        padding: 8px 8px 12px;
+      }
+
+      .service-image {
+        height: 160px;
+      }
+
+      .service-title {
+        font-size: 18px;
+      }
+
+      .service-desc {
+        font-size: 14px;
+      }
+
+      .faq-section {
+        padding: 40px 20px 60px;
+        gap: 40px;
+      }
+
+      .faq-question-text {
+        font-size: 18px;
+      }
+
+      .faq-answer {
+        font-size: 14px;
+      }
+
+      .cta-section {
+        padding: 40px 20px 60px;
+      }
+
+      .cta-banner {
+        padding: 30px 20px;
+        min-height: 300px;
+      }
+
+      .cta-label {
+        font-size: 14px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+        letter-spacing: -0.56px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        text-align: center;
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+
+      .footer {
+        padding: 40px 20px;
+        gap: 40px;
+      }
+
+      .footer-desc,
+      .footer-newsletter {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .footer-links {
+        gap: 30px;
+      }
+
+      .footer-column-title {
+        font-size: 18px;
+      }
+
+      .footer-link {
+        font-size: 14px;
+      }
+
+      .footer-bottom {
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+      }
+
+      .footer-bottom span {
+        font-size: 14px;
+      }
+    }
+
+    /* Large screens (1600px+) */
+    @media (min-width: 1600px) {
+      .navbar-container {
+        max-width: 1600px;
+        padding: 0 80px;
+      }
+
+      .hero-inner {
+        max-width: 1600px;
+        padding: 0 80px;
+      }
+
+      .benefit-card {
+        width: 450px;
+      }
+
+      .footer-inner {
+        max-width: 1400px;
+      }
+    }
+
+    /* Extra large screens (1920px+) */
+    @media (min-width: 1920px) {
+      .navbar-container {
+        max-width: 1800px;
+        padding: 0 60px;
+      }
+
+      .hero-inner {
+        max-width: 1800px;
+        padding: 0 60px;
+      }
+
+      .hero {
+        padding-bottom: 100px;
+      }
+
+      .section {
+        padding: 100px 80px;
+      }
+
+      .hero-bg,
+      .hero-bg-lines,
+      .footer-bg,
+      .footer-bg-lines {
+        width: 1600px;
+      }
+
+      .footer-inner {
+        max-width: 1680px;
+        padding: 0 80px;
+      }
+
+      .hero-headline {
+        font-size: 80px;
+      }
+
+      .section-title {
+        font-size: 72px;
+      }
+
+      .benefit-card {
+        width: 500px;
+        height: 350px;
+      }
+
+      .cta-title {
+        font-size: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- HERO SECTION -->
+    <section class="hero" data-od-id="hero">
+      <img class="hero-bg" src="figma-data/images/645afcb2bfb5961945b434e9f5fe915b6b8f3f48.svg" alt="">
+      <img class="hero-bg-lines" src="figma-data/images/586ab8abb1fc0a40bd076cf581546ebe0b0a5372.svg" alt="">
+
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-left">
+            <a href="dealspec-homepage.html" class="logo">
+              <img src="figma-data/images/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+            </a>
+            <div class="nav-divider"></div>
+            <div class="nav-links">
+              <a href="dealspec-homepage.html" class="nav-link">Home</a>
+              <a href="software-overview.html" class="nav-link">
+                Software
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="service-overview-2.html" class="nav-link">
+                Services
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="#" class="nav-link">
+                Unternehmen
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="#" class="nav-link">
+                Ressourcen
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+            </div>
+          </div>
+          <div class="navbar-right">
+            <a href="#" class="nav-login">Log In</a>
+            <div class="nav-buttons">
+              <button class="btn-ghost">Get in Touch</button>
+              <div class="btn-lang">
+                <img src="figma-data/images/67eb260f896fb52385d8a77d199101f392bd8a35.svg" alt="Language">
+              </div>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="hero-headline">Tailored support for your M&A workflows</h1>
+          <p class="hero-subtitle">Beyond software, we offer expert services to support your team's operational needs—from implementation and training to strategic consulting.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section class="section" data-od-id="benefits">
+      <div class="section-header">
+        <span class="section-label">Benefits</span>
+        <h2 class="section-title">Built to support every stage of your deal process</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card benefit-card-dark">
+          <img class="benefit-card-bg" src="figma-data/images/20e1e500c6539c23085677d7928fad9acafebda9.svg" alt="">
+          <img class="benefit-card-bg" src="figma-data/images/10973467f94b76b8212da5be4b388454f7b0dcb9.svg" alt="" style="opacity: 0.5;">
+          <div class="benefit-icon">
+            <img src="figma-data/images/2db7611239bb7eaee44c887f69e2e7fe90835cdb.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Expert implementation</h3>
+            <p class="benefit-desc">Get hands-on support to configure and deploy Dealspec for your specific workflows.</p>
+          </div>
+        </div>
+        <div class="benefit-card benefit-card-light">
+          <div class="benefit-icon">
+            <img src="figma-data/images/7a741ff63816f728d196c21c18ec72dc696a2f33.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Custom training</h3>
+            <p class="benefit-desc">Empower your team with tailored training programs designed for your organization's needs.</p>
+          </div>
+        </div>
+        <div class="benefit-card benefit-card-light">
+          <div class="benefit-icon">
+            <img src="figma-data/images/534d6c2d22a92b3ce8a8d3d5dd6e303bc1cc527d.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Strategic consulting</h3>
+            <p class="benefit-desc">Partner with our experts to optimize your M&A processes and drive better outcomes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="section" data-od-id="services">
+      <div class="section-header">
+        <span class="section-label">Our Services</span>
+        <h2 class="section-title">Comprehensive support for every need</h2>
+      </div>
+      <div class="services-grid">
+        <div class="services-row">
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/7e82f82e15c93c4506ee2e90f68e758b073432f1.png" alt="Platform Implementation">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Platform Implementation</h3>
+              <p class="service-desc">End-to-end setup and configuration of Dealspec tailored to your workflows.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/3cd103111c2f9e1c01f694742042f1e944802cbf.png" alt="Data Migration">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Data Migration</h3>
+              <p class="service-desc">Seamless transfer of your existing data into the Dealspec platform.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/f8b462b365b14ac3389b47a9aa0dc258c611eca8.png" alt="Team Training">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Team Training</h3>
+              <p class="service-desc">Comprehensive training programs to maximize platform adoption.</p>
+            </div>
+          </div>
+        </div>
+        <div class="services-row">
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/ba517d70dac51441854467c4b73d3fbe4a43088b.png" alt="Process Optimization">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Process Optimization</h3>
+              <p class="service-desc">Expert consulting to streamline your M&A operational workflows.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/baea502353cac1f2fe871205b8726706d0869c6a.png" alt="Custom Development">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Custom Development</h3>
+              <p class="service-desc">Bespoke features and integrations built for your specific requirements.</p>
+            </div>
+          </div>
+          <div class="service-card">
+            <div class="service-image">
+              <img src="figma-data/images/b53ef57731f653cecae1671a3f32d3c992530c25.png" alt="Ongoing Support">
+            </div>
+            <div class="service-content">
+              <h3 class="service-title">Ongoing Support</h3>
+              <p class="service-desc">Dedicated support to ensure continuous success with Dealspec.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section" data-od-id="faq">
+      <div class="section-header">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Answers to common questions about our services</h2>
+        <p class="section-subtitle">Learn more about how our services can support your team's operational needs and help you get the most out of Dealspec.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-question">
+            <span class="faq-question-text">What does the implementation process look like?</span>
+            <div class="faq-icon">
+              <img src="figma-data/images/0c1cb3c92862a850f4e64206aef9182820820c41.svg" alt="">
+            </div>
+          </div>
+          <p class="faq-answer">Our implementation process begins with a discovery phase where we understand your workflows and requirements. We then configure Dealspec to match your needs, migrate your data, and provide comprehensive training to ensure your team is ready to go.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">How long does implementation typically take?</span>
+            <div class="faq-icon">
+              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Do you offer ongoing support after implementation?</span>
+            <div class="faq-icon">
+              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Can you customize training for our specific team needs?</span>
+            <div class="faq-icon">
+              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">What consulting services do you provide?</span>
+            <div class="faq-icon">
+              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section" data-od-id="cta">
+      <div class="cta-banner">
+        <div class="cta-bg">
+          <img src="figma-data/images/930fc0fbc3124e38d70cb83d984d8d47658cf5a3.svg" alt="" style="position: absolute; width: 2118px; height: 764px; left: -763px; top: -154px; opacity: 0.3;">
+          <img src="figma-data/images/b9db56c78ee125a10c214b7b07f8afa28d9a08af.svg" alt="" style="position: absolute; width: 2118px; height: 764px; left: -763px; top: -154px; mix-blend-mode: plus-lighter; opacity: 0.3;">
+          <img src="figma-data/images/b2cc592f86dc03638a783c695df156ea1b6fc3ea.svg" alt="" style="position: absolute; width: 684px; height: 684px; right: -100px; top: -197px; opacity: 0.3;">
+          <img src="figma-data/images/6d23e20e0a94e6fc7f23d6c2d60e2b9bcafad20a.svg" alt="" style="position: absolute; width: 1200px; height: 322px; left: 270px; bottom: -100px; opacity: 1;">
+        </div>
+        <div class="cta-content">
+          <div class="cta-text">
+            <span class="cta-label">Get started</span>
+            <h2 class="cta-title">Ready to transform your M&A operations?</h2>
+          </div>
+          <div class="cta-buttons">
+            <button class="btn-primary">Talk to an expert</button>
+            <button class="btn-secondary">View pricing</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" data-od-id="footer">
+      <img class="footer-bg" src="figma-data/images/645afcb2bfb5961945b434e9f5fe915b6b8f3f48.svg" alt="">
+      <img class="footer-bg footer-bg-lines" src="figma-data/images/586ab8abb1fc0a40bd076cf581546ebe0b0a5372.svg" alt="">
+
+      <div class="footer-inner">
+        <div class="footer-content">
+          <div class="footer-left">
+            <div class="footer-brand">
+              <a href="dealspec-homepage.html" class="footer-logo">
+                <img src="figma-data/images/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+              </a>
+              <p class="footer-desc">An AI-powered platform designed to streamline M&A workflows, centralize data, and support better deal decisions.</p>
+            </div>
+            <div class="footer-newsletter">
+              <input type="email" class="footer-newsletter-input" placeholder="Enter your email">
+              <button class="footer-newsletter-btn">
+                <img src="figma-data/images/9dd67efbabbd6099058bc5258c32d6468cad89b6.svg" alt="Submit">
+              </button>
+            </div>
+          </div>
+          <div class="footer-links">
+            <div class="footer-column">
+              <span class="footer-column-title">Product</span>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">Overview</a>
+                <a href="#" class="footer-link">Features</a>
+                <a href="#" class="footer-link">Integrations</a>
+                <a href="#" class="footer-link">Pricing</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <span class="footer-column-title">Company</span>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Careers</a>
+                <a href="#" class="footer-link">Press</a>
+                <a href="#" class="footer-link">Contact</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <span class="footer-column-title">Resources</span>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">Insights</a>
+                <a href="#" class="footer-link">Help Center</a>
+                <a href="#" class="footer-link">Guides</a>
+                <a href="#" class="footer-link">Case Studies</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <span class="footer-column-title">Connect</span>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">LinkedIn</a>
+                <a href="#" class="footer-link">X</a>
+                <a href="#" class="footer-link">YouTube</a>
+                <a href="#" class="footer-link">Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Dealspec. All right reserved</span>
+          <span>Privacy Policy</span>
+          <span>Terms of Service</span>
+          <span>Imprint</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Navbar scroll behavior
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // FAQ toggle functionality
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const item = question.parentElement;
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

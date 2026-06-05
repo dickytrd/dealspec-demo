@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Long List Creation - Animated Cards</title>
+  <style>
+    /* ─── Tokens ─── */
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --fg: #111111;
+      --fg-muted: rgba(7, 12, 17, 0.5);
+      --fg-muted-10: rgba(7, 12, 17, 0.08);
+      --border: rgba(7, 12, 17, 0.1);
+      --accent: #5D6AF3;
+      --accent-bg: rgba(93, 106, 243, 0.2);
+      --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: var(--font-body);
+      background: transparent;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* ═══ Longlist Animated Cards — Self-contained Component ═══ */
+    .longlist-cards-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+      padding: 16px;
+    }
+
+    /* SVG specs: viewBox 435×305, back card at (6.68, 51.51) rotated -6.74°, front card at (36.68, 140.68) */
+    .longlist-cards {
+      --card-scale: 1;
+      position: relative;
+      /* Responsive: fit inside parent, maintain aspect ratio */
+      width: min(100%, 380px);
+      aspect-ratio: 435 / 305;
+      flex-shrink: 0;
+    }
+
+    .buyer-card {
+      position: absolute;
+      /* Card size: 382×148 in viewBox 435 → 87.8% width, height from ratio 148/382 */
+      width: 87.8%;
+      aspect-ratio: 382 / 148;
+      background: var(--surface);
+      border-radius: calc(12px * var(--card-scale));
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      padding: calc(14px * var(--card-scale));
+      transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    .buyer-card--back {
+      /* SVG: x=6.68/435 = 1.54%, y=51.51/305 = 16.9% */
+      top: 16.9%;
+      left: 1.54%;
+      transform: rotate(-6.74deg);
+      transform-origin: top left;
+      z-index: 1;
+      background: #F5F5F5;
+    }
+
+    .buyer-card--front {
+      /* SVG: x=36.68/435 = 8.43%, y=140.68/305 = 46.1% */
+      top: 46.1%;
+      left: 8.43%;
+      z-index: 2;
+    }
+
+    .longlist-cards-wrapper:hover .buyer-card--back {
+      transform: rotate(0deg) translate(-3%, -8%);
+    }
+
+    .longlist-cards-wrapper:hover .buyer-card--front {
+      transform: translate(3%, 8%);
+    }
+
+    .buyer-card__header {
+      display: flex;
+      align-items: flex-start;
+      gap: calc(10px * var(--card-scale));
+    }
+
+    .match-badge {
+      width: calc(40px * var(--card-scale));
+      height: calc(40px * var(--card-scale));
+      border-radius: 50%;
+      background: var(--accent-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .match-badge__percent {
+      font-size: calc(13px * var(--card-scale));
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .match-badge__label {
+      font-size: calc(6px * var(--card-scale));
+      font-weight: 600;
+      color: rgba(93, 106, 243, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-top: 1px;
+    }
+
+    .buyer-card__info {
+      flex: 1;
+      min-width: 0;
+      padding-top: calc(2px * var(--card-scale));
+      padding-right: calc(90px * var(--card-scale)); /* space for type-pill */
+    }
+
+    .buyer-card__name {
+      font-size: calc(14px * var(--card-scale));
+      font-weight: 600;
+      color: var(--fg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: calc(2px * var(--card-scale));
+      line-height: 1.3;
+    }
+
+    .buyer-card__location {
+      font-size: calc(11px * var(--card-scale));
+      color: var(--fg-muted);
+      line-height: 1.3;
+    }
+
+    .type-pill {
+      position: absolute;
+      top: calc(14px * var(--card-scale));
+      right: calc(14px * var(--card-scale));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: calc(22px * var(--card-scale));
+      padding: 0 calc(8px * var(--card-scale));
+      background: var(--accent-bg);
+      color: var(--accent);
+      font-size: calc(9px * var(--card-scale));
+      font-weight: 600;
+      border-radius: calc(4px * var(--card-scale));
+      white-space: nowrap;
+    }
+
+    .buyer-card__stats {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--fg-muted-10);
+      margin-top: auto;
+      padding-top: calc(10px * var(--card-scale));
+    }
+
+    .stat {
+      flex: 1;
+      text-align: left;
+    }
+
+    .stat:not(:last-child) {
+      border-right: 1px solid var(--fg-muted-10);
+      padding-right: calc(8px * var(--card-scale));
+      margin-right: calc(6px * var(--card-scale));
+    }
+
+    .stat__label {
+      font-size: calc(8px * var(--card-scale));
+      font-weight: 500;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: calc(2px * var(--card-scale));
+    }
+
+    .stat__value {
+      font-size: calc(11px * var(--card-scale));
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    /* ═══ Responsive — scale down on smaller containers ═══ */
+    @media (max-width: 380px) {
+      .longlist-cards {
+        --card-scale: 0.9;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .longlist-cards {
+        --card-scale: 0.75;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="longlist-cards-wrapper">
+    <div class="longlist-cards">
+    <!-- Back Card (rotated) -->
+    <div class="buyer-card buyer-card--back">
+      <div class="type-pill">Private Equity</div>
+      <div class="buyer-card__header">
+        <div class="match-badge">
+          <span class="match-badge__percent">92%</span>
+          <span class="match-badge__label">Match</span>
+        </div>
+        <div class="buyer-card__info">
+          <div class="buyer-card__name">German Industry 4.0</div>
+          <div class="buyer-card__location">Germany</div>
+        </div>
+      </div>
+      <div class="buyer-card__stats">
+        <div class="stat">
+          <div class="stat__label">Revenue</div>
+          <div class="stat__value">$50M-200M</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">EBITDA</div>
+          <div class="stat__value">$10M-50M</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Ticket</div>
+          <div class="stat__value">$35M-175M</div>
+        </div>
+      </div>
+    </div>
+    <!-- Front Card -->
+    <div class="buyer-card buyer-card--front">
+      <div class="type-pill">Venture Capital</div>
+      <div class="buyer-card__header">
+        <div class="match-badge">
+          <span class="match-badge__percent">92%</span>
+          <span class="match-badge__label">Match</span>
+        </div>
+        <div class="buyer-card__info">
+          <div class="buyer-card__name">TechVentures Capital</div>
+          <div class="buyer-card__location">United States</div>
+        </div>
+      </div>
+      <div class="buyer-card__stats">
+        <div class="stat">
+          <div class="stat__label">Revenue</div>
+          <div class="stat__value">$10M-500M</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">EBITDA</div>
+          <div class="stat__value">$2M-10M</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">Ticket</div>
+          <div class="stat__value">$5M-20M</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    // Send click event to parent window
+    document.body.addEventListener('click', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'bento-card-click' }, '*');
+      }
+    });
+  </script>
+</body></html>

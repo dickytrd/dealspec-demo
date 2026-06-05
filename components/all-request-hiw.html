@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Request Component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --card-scale: 2.4;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      
+    }
+
+    .all-request-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+
+    .all-request {
+      width: calc(290px * var(--card-scale));
+      max-width: 100%;
+      background: #ffffff;
+      border-radius: calc(8px * var(--card-scale));
+      padding: calc(10px * var(--card-scale));
+      display: flex;
+      flex-direction: column;
+      gap: calc(12px * var(--card-scale));
+      filter: drop-shadow(4px 4px 6px rgba(0,0,0,0.08));
+      position: relative;
+    }
+
+    /* Header */
+    .all-request__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .all-request__title {
+      font-weight: 500;
+      font-size: calc(13px * var(--card-scale));
+      color: #070c11;
+      letter-spacing: -0.01em;
+    }
+
+    .all-request__search {
+      display: flex;
+      align-items: center;
+      gap: calc(6px * var(--card-scale));
+      background: #f9fbfc;
+      padding: calc(4px * var(--card-scale)) calc(8px * var(--card-scale));
+      border-radius: calc(6px * var(--card-scale));
+      width: calc(116px * var(--card-scale));
+      height: calc(20px * var(--card-scale));
+    }
+
+    .all-request__search-icon {
+      width: calc(10px * var(--card-scale));
+      height: calc(10px * var(--card-scale));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .all-request__search-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .all-request__search-text {
+      font-weight: 400;
+      font-size: calc(8px * var(--card-scale));
+      color: rgba(7, 12, 17, 0.3);
+      letter-spacing: -0.01em;
+    }
+
+    /* Cards container */
+    .all-request__cards {
+      display: flex;
+      flex-direction: column;
+      gap: calc(8px * var(--card-scale));
+      position: relative;
+    }
+
+    /* Deal card */
+    .deal-card {
+      width: 100%;
+      background: #f5f5f5;
+      border-radius: calc(8px * var(--card-scale));
+      padding: calc(10px * var(--card-scale));
+      display: flex;
+      align-items: center;
+      gap: calc(8px * var(--card-scale));
+      transition: background 0.2s ease, transform 0.4s ease;
+    }
+
+    /* Stratton card - popped out by default, slides into list on hover */
+    .deal-card--stratton {
+      position: relative;
+      transform: translateX(calc(24px * var(--card-scale))) rotate(-4deg);
+      z-index: 10;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Hover: Stratton slides back into list */
+    .all-request:hover .deal-card--stratton {
+      transform: translateX(0) rotate(0deg);
+      z-index: 1;
+      box-shadow: none;
+    }
+
+    .deal-card:hover {
+      background: #ffffff;
+    }
+
+    /* Checkbox */
+    .deal-card__checkbox {
+      width: calc(10px * var(--card-scale));
+      height: calc(10px * var(--card-scale));
+      border: 1px solid rgba(7, 12, 17, 0.3);
+      border-radius: calc(2px * var(--card-scale));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      background: transparent;
+    }
+
+    .deal-card__checkbox svg {
+      width: calc(6px * var(--card-scale));
+      height: calc(6px * var(--card-scale));
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease;
+    }
+
+    .deal-card:hover .deal-card__checkbox {
+      background: #2F6FEB;
+      border-color: #2F6FEB;
+    }
+
+    .deal-card:hover .deal-card__checkbox svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Card content */
+    .deal-card__content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: calc(8px * var(--card-scale));
+    }
+
+    .deal-card__left {
+      display: flex;
+      align-items: flex-start;
+      gap: calc(6px * var(--card-scale));
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Deal icon */
+    .deal-card__icon {
+      width: calc(22px * var(--card-scale));
+      height: calc(22px * var(--card-scale));
+      border-radius: calc(4px * var(--card-scale));
+      padding: calc(4px * var(--card-scale));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deal-card__icon--red { background: rgba(218, 18, 18, 0.2); }
+    .deal-card__icon--brown { background: rgba(119, 87, 50, 0.2); }
+    .deal-card__icon--blue { background: rgba(0, 13, 255, 0.2); }
+
+    .deal-card__icon svg {
+      width: calc(14px * var(--card-scale));
+      height: calc(13px * var(--card-scale));
+    }
+
+    /* Deal info */
+    .deal-card__info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: calc(2px * var(--card-scale));
+    }
+
+    .deal-card__name {
+      font-weight: 500;
+      font-size: calc(9px * var(--card-scale));
+      color: #070c11;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .deal-card__date {
+      font-weight: 400;
+      font-size: calc(6px * var(--card-scale));
+      color: rgba(7, 12, 17, 0.6);
+      letter-spacing: -0.01em;
+    }
+
+    /* Badge */
+    .deal-card__badge {
+      padding: calc(4px * var(--card-scale)) calc(8px * var(--card-scale));
+      border-radius: calc(4px * var(--card-scale));
+      font-weight: 600;
+      font-size: calc(6px * var(--card-scale));
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
+
+    .deal-card__badge--blue {
+      background: rgba(0, 13, 255, 0.2);
+      color: #000dff;
+    }
+
+    .deal-card__badge--green {
+      background: rgba(15, 168, 48, 0.2);
+      color: #0fa830;
+    }
+
+    .deal-card__badge--orange {
+      background: rgba(255, 106, 0, 0.2);
+      color: #ff6a00;
+    }
+
+    /* Responsive scaling */
+    @media (max-width: 800px) {
+      :root { --card-scale: 2.0; }
+    }
+
+    @media (max-width: 700px) {
+      :root { --card-scale: 1.8; }
+    }
+
+    @media (max-width: 600px) {
+      :root { --card-scale: 1.5; }
+    }
+
+    @media (max-width: 500px) {
+      :root { --card-scale: 1.3; }
+    }
+
+    @media (max-width: 420px) {
+      :root { --card-scale: 1.1; }
+    }
+
+    @media (max-width: 350px) {
+      :root { --card-scale: 0.95; }
+    }
+  </style>
+</head>
+<body>
+  <div class="all-request-wrapper">
+    <div class="all-request">
+      <!-- Header -->
+      <div class="all-request__header">
+        <span class="all-request__title">All Request</span>
+        <div class="all-request__search">
+          <div class="all-request__search-icon">
+            <svg viewBox="0 0 7.12747 7.13097" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.04752 6.66303L5.33334 4.94862C5.83007 4.35196 6.07816 3.58664 6.02503 2.8119C5.97191 2.03716 5.62306 1.31261 5.04966 0.789053C4.47626 0.265437 3.72377 -0.0168639 2.94774 0.000779905C2.1717 0.0184237 1.43235 0.334643 0.883597 0.883793C0.334842 1.43289 0.0188418 2.17251 0.00076898 2.94889C-0.0167562 3.72522 0.265851 4.47848 0.788866 5.05196C1.31243 5.62544 2.03643 5.97503 2.81082 6.0279C3.58521 6.08078 4.34974 5.83294 4.94614 5.33596L6.65977 7.0507C6.68551 7.07612 6.71564 7.09634 6.7485 7.11009C6.78191 7.1239 6.8175 7.13097 6.85364 7.13097C6.88979 7.13097 6.92539 7.1239 6.95825 7.11009C6.99166 7.09634 7.02178 7.07612 7.04752 7.0507C7.07271 7.02522 7.09297 6.99503 7.10667 6.96177C7.12036 6.92851 7.12747 6.89283 7.12747 6.85683C7.12747 6.82083 7.12036 6.78522 7.10667 6.75196C7.09297 6.7187 7.07271 6.68845 7.04752 6.66303ZM0.555549 3.02122C0.555549 2.53355 0.700146 2.05683 0.97069 1.65135C1.24178 1.24588 1.62678 0.92982 2.07696 0.74319C2.52713 0.55656 3.02277 0.507738 3.50088 0.602861C3.97899 0.697985 4.4182 0.932834 4.76268 1.27771C5.10716 1.62253 5.34211 2.06188 5.43686 2.54018C5.53215 3.01853 5.4834 3.51426 5.29665 3.96483C5.11045 4.41541 4.79444 4.8005 4.38917 5.07146C3.9839 5.34237 3.50744 5.48697 3.02002 5.48697C2.36666 5.48626 1.74014 5.22626 1.27791 4.76401C0.816236 4.30171 0.556097 3.67497 0.555549 3.02122Z" fill="#070C11" fill-opacity="0.3"></path>
+            </svg>
+          </div>
+          <span class="all-request__search-text">Search files...</span>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="all-request__cards">
+        <!-- Card 1: Project Zero -->
+        <div class="deal-card deal-card--zero">
+          <div class="deal-card__checkbox">
+            <svg viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="deal-card__content">
+            <div class="deal-card__left">
+              <div class="deal-card__icon deal-card__icon--red">
+                <svg viewBox="0 0 14.2391 13.1507" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g>
+                    <path d="M1.94838 9.94136C2.47052 10.3129 3.31715 10.3129 3.83929 9.94136C4.36143 9.5693 4.36143 8.96656 3.83929 8.59506C3.31715 8.223 2.47052 8.223 1.94838 8.59506C1.42624 8.96656 1.42624 9.5693 1.94838 9.94136Z" fill="#DA1212"></path>
+                    <path d="M7.36802 4.89205C8.15129 5.44985 9.42109 5.44985 10.2044 4.89205C10.9876 4.33478 10.9876 3.43067 10.2044 2.87286C9.42109 2.31506 8.15129 2.31506 7.36802 2.87286C6.58481 3.43067 6.58481 4.33478 7.36802 4.89205Z" fill="#DA1212"></path>
+                    <path d="M4.491 7.41697C5.1437 7.88163 6.20194 7.88163 6.85465 7.41697C7.50735 6.95177 7.50735 6.19834 6.85465 5.73368C6.20194 5.26903 5.1437 5.26903 4.491 5.73368C3.8383 6.19834 3.8383 6.95177 4.491 7.41697Z" fill="#DA1212"></path>
+                    <path d="M0.293735 7.08053C0.685367 7.35944 1.32032 7.35944 1.7119 7.08053C2.10353 6.80163 2.10353 6.34958 1.7119 6.07067C1.32032 5.79177 0.685367 5.79177 0.293735 6.07067C-0.0978971 6.34958 -0.0978971 6.80163 0.293735 7.08053Z" fill="#DA1212"></path>
+                    <path d="M4.491 2.03144C5.1437 2.49642 6.20194 2.49642 6.85465 2.03144C7.50735 1.56672 7.50735 0.813247 6.85465 0.348534C6.20194 -0.116178 5.1437 -0.116178 4.491 0.348534C3.8383 0.813247 3.8383 1.56672 4.491 2.03144Z" fill="#DA1212"></path>
+                    <path d="M1.94838 4.55561C2.47052 4.92766 3.31715 4.92766 3.83929 4.55561C4.36143 4.1841 4.36143 3.58081 3.83929 3.2093C3.31715 2.8378 2.47052 2.8378 1.94838 3.2093C1.42624 3.58081 1.42624 4.1841 1.94838 4.55561Z" fill="#DA1212"></path>
+                    <path d="M4.491 12.8022C5.1437 13.2668 6.20194 13.2668 6.85465 12.8022C7.50735 12.3375 7.50735 11.5841 6.85465 11.1194C6.20194 10.6548 5.1437 10.6548 4.491 11.1194C3.8383 11.5841 3.8383 12.3375 4.491 12.8022Z" fill="#DA1212"></path>
+                    <path d="M10.8152 7.58519C11.5985 8.143 12.8684 8.143 13.6516 7.58519C14.4349 7.02739 14.4349 6.12327 13.6516 5.56547C12.8684 5.00821 11.5985 5.00821 10.8152 5.56547C10.032 6.12327 10.032 7.02739 10.8152 7.58519Z" fill="#DA1212"></path>
+                    <path d="M7.36802 10.2778C8.15129 10.8356 9.42109 10.8356 10.2044 10.2778C10.9876 9.71999 10.9876 8.81588 10.2044 8.25807C9.42109 7.70081 8.15129 7.70081 7.36802 8.25807C6.58481 8.81588 6.58481 9.71999 7.36802 10.2778Z" fill="#DA1212"></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="deal-card__info">
+                <span class="deal-card__name">Project Zero</span>
+                <span class="deal-card__date">26.03.2024 - 11:15</span>
+              </div>
+            </div>
+            <span class="deal-card__badge deal-card__badge--blue">Cash Deal</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Stratton Oak (middle - pops out on hover) -->
+        <div class="deal-card deal-card--stratton">
+          <div class="deal-card__checkbox">
+            <svg viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="deal-card__content">
+            <div class="deal-card__left">
+              <div class="deal-card__icon deal-card__icon--blue">
+                <svg viewBox="0 0 13.9064 13.7436" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.79395 3.9188C8.21016 3.57178 7.53651 3.40514 6.85828 3.44064L6.67857 0.00938288C8.03502 -0.0616244 9.38231 0.271655 10.5499 0.966267C11.7169 1.66145 12.6521 2.68705 13.237 3.91365C13.822 5.14024 14.0303 6.51286 13.8351 7.85799C13.64 9.20312 13.051 10.4601 12.1421 11.4696C11.2333 12.4798 10.0451 13.1973 8.7287 13.5323C7.41231 13.8667 6.0261 13.8031 4.7452 13.3496C3.46487 12.8955 2.34766 12.0726 1.53493 10.9835C0.722208 9.89429 0.250591 8.58867 0.179621 7.23152L3.60853 7.05171C3.64401 7.73029 3.88039 8.3831 4.28675 8.92768C4.69312 9.47226 5.25172 9.88398 5.8916 10.1107C6.53205 10.3375 7.22516 10.369 7.88335 10.2018C8.54154 10.0346 9.13563 9.67612 9.59007 9.17105C10.0445 8.66598 10.3393 8.03722 10.4366 7.36494C10.5339 6.69209 10.4303 6.00607 10.1378 5.39277C9.84533 4.77947 9.37774 4.26639 8.79395 3.9188Z" fill="#000DFF"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.24919 0.189C3.27323 0.639668 3.20741 1.0909 3.05688 1.5158C2.90635 1.94127 2.67398 2.33296 2.37178 2.66795C2.07016 3.00352 1.70558 3.2761 1.29864 3.47022C0.891135 3.66435 0.449861 3.77659 0 3.80007L0.179713 7.23132C1.08001 7.18379 1.96256 6.95989 2.77701 6.57106C3.59088 6.18281 4.32061 5.63766 4.92386 4.9671C5.52768 4.29654 5.993 3.51374 6.29405 2.6628C6.5951 1.81243 6.72617 0.91052 6.67866 0.00918516L3.24919 0.189Z" fill="#000DFF"></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="deal-card__info">
+                <span class="deal-card__name">Stratton Oak Equity Partner</span>
+                <span class="deal-card__date">24.03.2024 - 14:10</span>
+              </div>
+            </div>
+            <span class="deal-card__badge deal-card__badge--orange">Negotiation</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Clington Lab -->
+        <div class="deal-card deal-card--clington">
+          <div class="deal-card__checkbox">
+            <svg viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="deal-card__content">
+            <div class="deal-card__left">
+              <div class="deal-card__icon deal-card__icon--brown">
+                <svg viewBox="0 0 13.9064 13.9142" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g>
+                    <path d="M13.9064 7.48082H11.4155C9.23972 7.48082 7.4759 9.24527 7.4759 11.4225V13.9142C10.91 13.6596 13.6517 10.9167 13.9064 7.48082Z" fill="#775732"></path>
+                    <path d="M6.43051 13.9142V11.4225C6.43051 9.24527 4.6667 7.48082 2.4909 7.48082H9.13566e-10C0.254622 10.9167 2.99643 13.6596 6.43051 13.9142Z" fill="#775732"></path>
+                    <path d="M13.9064 6.43398C13.6517 2.99811 10.91 0.254638 7.4759 0V2.49233C7.4759 4.66896 9.23972 6.43398 11.4155 6.43398H13.9064Z" fill="#775732"></path>
+                    <path d="M6.43051 2.60258e-10C2.99643 0.254638 0.254622 2.99811 0 6.43398H2.4909C4.6667 6.43398 6.43051 4.66896 6.43051 2.49233V2.60258e-10Z" fill="#775732"></path>
+                    <path d="M4.71541 6.95676C5.682 6.47364 6.46975 5.68591 6.95273 4.71851C7.43566 5.68591 8.2234 6.47364 9.19 6.95676C8.2234 7.44045 7.43566 8.22821 6.95273 9.19561C6.46975 8.22821 5.682 7.44045 4.71541 6.95676Z" fill="#CA9352"></path>
+                  </g>
+                </svg>
+              </div>
+              <div class="deal-card__info">
+                <span class="deal-card__name">Clington Lab</span>
+                <span class="deal-card__date">25.03.2024 - 13:30</span>
+              </div>
+            </div>
+            <span class="deal-card__badge deal-card__badge--green">Done</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body></html>

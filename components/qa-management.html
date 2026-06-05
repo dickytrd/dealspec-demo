@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q&amp;A Management Component</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background: transparent;
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    :root {
+      --card-scale: 1.15;
+    }
+
+    .qa-management-wrapper {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .qa-management {
+      /* Figma dimensions: 356.638 × 288px */
+      width: calc(357px * var(--card-scale));
+      height: calc(288px * var(--card-scale));
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qa-card-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .qa-card-wrapper--back {
+      margin-bottom: calc(-20px * var(--card-scale));
+      z-index: 1;
+    }
+
+    .qa-card-wrapper--front {
+      z-index: 2;
+    }
+
+    .qa-card {
+      /* Figma card width: 350px */
+      width: calc(350px * var(--card-scale));
+      background: #ffffff;
+      border: 1px solid rgba(7, 12, 17, 0.1);
+      border-radius: calc(12px * var(--card-scale));
+      padding: calc(16px * var(--card-scale));
+      display: flex;
+      flex-direction: column;
+      gap: calc(12px * var(--card-scale));
+      filter: drop-shadow(-4px -4px 6px rgba(0, 0, 0, 0.08));
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Figma rotations */
+    .qa-card--back {
+      transform: rotate(-3deg);
+    }
+
+    .qa-card--front {
+      transform: rotate(3deg);
+    }
+
+    /* Hover: cards straighten and separate */
+    .qa-management:hover .qa-card--back {
+      transform: rotate(0deg) translate(calc(-12px * var(--card-scale)), calc(-12px * var(--card-scale)));
+    }
+
+    .qa-management:hover .qa-card--front {
+      transform: rotate(0deg) translate(calc(12px * var(--card-scale)), calc(12px * var(--card-scale)));
+    }
+
+    .qa-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .qa-card__quote-icon {
+      width: calc(24px * var(--card-scale));
+      height: calc(24px * var(--card-scale));
+      flex-shrink: 0;
+    }
+
+    .qa-card__quote-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qa-card__label {
+      font-family: 'Geist', sans-serif;
+      font-weight: 400;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1;
+      color: rgba(7, 12, 17, 0.3);
+      letter-spacing: -0.12px;
+      white-space: nowrap;
+    }
+
+    .qa-card__quote {
+      font-family: 'Geist', sans-serif;
+      font-weight: 400;
+      font-size: calc(16px * var(--card-scale));
+      line-height: 1.4;
+      color: #070c11;
+      letter-spacing: -0.16px;
+    }
+
+    .qa-card__divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(7, 12, 17, 0.1);
+    }
+
+    .qa-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .qa-card__meta {
+      display: flex;
+      align-items: center;
+      gap: calc(4px * var(--card-scale));
+    }
+
+    .qa-card__person-icon {
+      width: calc(16px * var(--card-scale));
+      height: calc(16px * var(--card-scale));
+      flex-shrink: 0;
+    }
+
+    .qa-card__person-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qa-card__assigned {
+      font-family: 'Geist', sans-serif;
+      font-weight: 400;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1;
+      color: rgba(7, 12, 17, 0.3);
+      letter-spacing: -0.12px;
+      white-space: nowrap;
+    }
+
+    .qa-card__status {
+      display: flex;
+      align-items: center;
+      gap: calc(4px * var(--card-scale));
+    }
+
+    .qa-card__status-dot {
+      width: calc(6px * var(--card-scale));
+      height: calc(6px * var(--card-scale));
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Figma colors: #61FF4C (green), #FF4C4C (red) */
+    .qa-card__status-dot--answered {
+      background: #61FF4C;
+    }
+
+    .qa-card__status-dot--pending {
+      background: #FF4C4C;
+    }
+
+    .qa-card__status-text {
+      font-family: 'Geist', sans-serif;
+      font-weight: 400;
+      font-size: calc(12px * var(--card-scale));
+      line-height: 1;
+      color: rgba(7, 12, 17, 0.3);
+      letter-spacing: -0.12px;
+      white-space: nowrap;
+    }
+
+    /* Responsive scaling — same approach as longlist-cards */
+    @media (max-width: 560px) {
+      :root { --card-scale: 0.95; }
+    }
+    @media (max-width: 500px) {
+      :root { --card-scale: 0.9; }
+    }
+    @media (max-width: 440px) {
+      :root { --card-scale: 0.85; }
+    }
+    @media (max-width: 380px) {
+      :root { --card-scale: 0.75; }
+    }
+    @media (max-width: 340px) {
+      :root { --card-scale: 0.65; }
+    }
+    @media (max-width: 300px) {
+      :root { --card-scale: 0.55; }
+    }
+  </style>
+</head>
+<body>
+  <div class="qa-management-wrapper" style="gap: 8px;">
+    <div class="qa-management">
+      <!-- Back Card (top, rotated -3deg) - Figma node 8004:284 -->
+      <div class="qa-card-wrapper qa-card-wrapper--back">
+        <div class="qa-card qa-card--back">
+          <div class="qa-card__header">
+            <div class="qa-card__quote-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.875 6.75V15C10.8738 16.1931 10.3993 17.337 9.55561 18.1806C8.71196 19.0243 7.56809 19.4988 6.375 19.5C6.17609 19.5 5.98532 19.421 5.84467 19.2803C5.70402 19.1397 5.625 18.9489 5.625 18.75C5.625 18.5511 5.70402 18.3603 5.84467 18.2197C5.98532 18.079 6.17609 18 6.375 18C7.17065 18 7.93371 17.6839 8.49632 17.1213C9.05893 16.5587 9.375 15.7956 9.375 15V14.25H3.75C3.35217 14.25 2.97064 14.092 2.68934 13.8107C2.40803 13.5294 2.25 13.1478 2.25 12.75V6.75C2.25 6.35217 2.40803 5.97064 2.68934 5.68934C2.97064 5.40803 3.35217 5.25 3.75 5.25H9.375C9.77282 5.25 10.1544 5.40803 10.4357 5.68934C10.717 5.97064 10.875 6.35217 10.875 6.75ZM20.25 5.25H14.625C14.2272 5.25 13.8456 5.40803 13.5643 5.68934C13.283 5.97064 13.125 6.35217 13.125 6.75V12.75C13.125 13.1478 13.283 13.5294 13.5643 13.8107C13.8456 14.092 14.2272 14.25 14.625 14.25H20.25V15C20.25 15.7956 19.9339 16.5587 19.3713 17.1213C18.8087 17.6839 18.0456 18 17.25 18C17.0511 18 16.8603 18.079 16.7197 18.2197C16.579 18.3603 16.5 18.5511 16.5 18.75C16.5 18.9489 16.579 19.1397 16.7197 19.2803C16.8603 19.421 17.0511 19.5 17.25 19.5C18.4431 19.4988 19.587 19.0243 20.4306 18.1806C21.2743 17.337 21.7488 16.1931 21.75 15V6.75C21.75 6.35217 21.592 5.97064 21.3107 5.68934C21.0294 5.40803 20.6478 5.25 20.25 5.25Z" fill="#070C11"></path>
+              </svg>
+            </div>
+            <span class="qa-card__label">Q&amp;A Workspace</span>
+          </div>
+          <p class="qa-card__quote">"Share customer concentration data"</p>
+          <div class="qa-card__divider"></div>
+          <div class="qa-card__footer">
+            <div class="qa-card__meta">
+              <div class="qa-card__person-icon">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 1.5C6.71442 1.5 5.45771 1.88122 4.38879 2.59545C3.31987 3.30968 2.48675 4.32484 1.99478 5.51256C1.50281 6.70027 1.37409 8.00721 1.6249 9.26808C1.8757 10.529 2.49476 11.6871 3.4038 12.5962C4.31285 13.5052 5.47103 14.1243 6.73191 14.3751C7.99279 14.6259 9.29972 14.4972 10.4874 14.0052C11.6752 13.5132 12.6903 12.6801 13.4045 11.6112C14.1188 10.5423 14.5 9.28558 14.5 8C14.4982 6.27665 13.8128 4.62441 12.5942 3.40581C11.3756 2.18722 9.72335 1.50182 8 1.5ZM4.63 12.3437C4.99171 11.778 5.49 11.3125 6.07895 10.99C6.6679 10.6676 7.32855 10.4985 8 10.4985C8.67145 10.4985 9.3321 10.6676 9.92105 10.99C10.51 11.3125 11.0083 11.778 11.37 12.3437C10.4065 13.0931 9.22064 13.5 8 13.5C6.77936 13.5 5.59354 13.0931 4.63 12.3437ZM6 7.5C6 7.10443 6.1173 6.71776 6.33706 6.38886C6.55682 6.05996 6.86918 5.80361 7.23463 5.65224C7.60008 5.50086 8.00222 5.46126 8.39018 5.53843C8.77814 5.6156 9.1345 5.80608 9.41421 6.08578C9.69391 6.36549 9.8844 6.72186 9.96157 7.10982C10.0387 7.49778 9.99913 7.89991 9.84776 8.26536C9.69638 8.63082 9.44004 8.94317 9.11114 9.16294C8.78224 9.3827 8.39556 9.5 8 9.5C7.46956 9.5 6.96086 9.28928 6.58578 8.91421C6.21071 8.53914 6 8.03043 6 7.5ZM12.11 11.6506C11.5524 10.8425 10.7682 10.2174 9.85625 9.85375C10.3461 9.4679 10.7036 8.93899 10.879 8.34056C11.0543 7.74213 11.0388 7.10393 10.8346 6.51471C10.6305 5.9255 10.2477 5.41455 9.73971 5.05293C9.23168 4.69131 8.62359 4.49698 8 4.49698C7.37641 4.49698 6.76832 4.69131 6.26029 5.05293C5.75226 5.41455 5.36954 5.9255 5.16536 6.51471C4.96119 7.10393 4.94569 7.74213 5.12104 8.34056C5.29639 8.93899 5.65386 9.4679 6.14375 9.85375C5.23176 10.2174 4.44764 10.8425 3.89 11.6506C3.18535 10.8582 2.72479 9.87902 2.56378 8.83094C2.40276 7.78285 2.54815 6.71056 2.98245 5.74318C3.41674 4.77581 4.12142 3.95461 5.01163 3.37846C5.90183 2.80231 6.93961 2.49578 8 2.49578C9.06038 2.49578 10.0982 2.80231 10.9884 3.37846C11.8786 3.95461 12.5833 4.77581 13.0175 5.74318C13.4518 6.71056 13.5972 7.78285 13.4362 8.83094C13.2752 9.87902 12.8146 10.8582 12.11 11.6506Z" fill="#070C11" fill-opacity="0.3"></path>
+                </svg>
+              </div>
+              <span class="qa-card__assigned">Assigned to: Management</span>
+            </div>
+            <div class="qa-card__status">
+              <div class="qa-card__status-dot qa-card__status-dot--answered"></div>
+              <span class="qa-card__status-text">Answered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Front Card (bottom, rotated 3deg) - Figma node 8004:299 -->
+      <div class="qa-card-wrapper qa-card-wrapper--front">
+        <div class="qa-card qa-card--front">
+          <div class="qa-card__header">
+            <div class="qa-card__quote-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10.875 6.75V15C10.8738 16.1931 10.3993 17.337 9.55561 18.1806C8.71196 19.0243 7.56809 19.4988 6.375 19.5C6.17609 19.5 5.98532 19.421 5.84467 19.2803C5.70402 19.1397 5.625 18.9489 5.625 18.75C5.625 18.5511 5.70402 18.3603 5.84467 18.2197C5.98532 18.079 6.17609 18 6.375 18C7.17065 18 7.93371 17.6839 8.49632 17.1213C9.05893 16.5587 9.375 15.7956 9.375 15V14.25H3.75C3.35217 14.25 2.97064 14.092 2.68934 13.8107C2.40803 13.5294 2.25 13.1478 2.25 12.75V6.75C2.25 6.35217 2.40803 5.97064 2.68934 5.68934C2.97064 5.40803 3.35217 5.25 3.75 5.25H9.375C9.77282 5.25 10.1544 5.40803 10.4357 5.68934C10.717 5.97064 10.875 6.35217 10.875 6.75ZM20.25 5.25H14.625C14.2272 5.25 13.8456 5.40803 13.5643 5.68934C13.283 5.97064 13.125 6.35217 13.125 6.75V12.75C13.125 13.1478 13.283 13.5294 13.5643 13.8107C13.8456 14.092 14.2272 14.25 14.625 14.25H20.25V15C20.25 15.7956 19.9339 16.5587 19.3713 17.1213C18.8087 17.6839 18.0456 18 17.25 18C17.0511 18 16.8603 18.079 16.7197 18.2197C16.579 18.3603 16.5 18.5511 16.5 18.75C16.5 18.9489 16.579 19.1397 16.7197 19.2803C16.8603 19.421 17.0511 19.5 17.25 19.5C18.4431 19.4988 19.587 19.0243 20.4306 18.1806C21.2743 17.337 21.7488 16.1931 21.75 15V6.75C21.75 6.35217 21.592 5.97064 21.3107 5.68934C21.0294 5.40803 20.6478 5.25 20.25 5.25Z" fill="#070C11"></path>
+              </svg>
+            </div>
+            <span class="qa-card__label">Q&amp;A Workspace</span>
+          </div>
+          <p class="qa-card__quote">"Upload legal documents"</p>
+          <div class="qa-card__divider"></div>
+          <div class="qa-card__footer">
+            <div class="qa-card__meta">
+              <div class="qa-card__person-icon">
+                <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 1.5C6.71442 1.5 5.45771 1.88122 4.38879 2.59545C3.31987 3.30968 2.48675 4.32484 1.99478 5.51256C1.50281 6.70027 1.37409 8.00721 1.6249 9.26808C1.8757 10.529 2.49476 11.6871 3.4038 12.5962C4.31285 13.5052 5.47103 14.1243 6.73191 14.3751C7.99279 14.6259 9.29972 14.4972 10.4874 14.0052C11.6752 13.5132 12.6903 12.6801 13.4045 11.6112C14.1188 10.5423 14.5 9.28558 14.5 8C14.4982 6.27665 13.8128 4.62441 12.5942 3.40581C11.3756 2.18722 9.72335 1.50182 8 1.5ZM4.63 12.3437C4.99171 11.778 5.49 11.3125 6.07895 10.99C6.6679 10.6676 7.32855 10.4985 8 10.4985C8.67145 10.4985 9.3321 10.6676 9.92105 10.99C10.51 11.3125 11.0083 11.778 11.37 12.3437C10.4065 13.0931 9.22064 13.5 8 13.5C6.77936 13.5 5.59354 13.0931 4.63 12.3437ZM6 7.5C6 7.10443 6.1173 6.71776 6.33706 6.38886C6.55682 6.05996 6.86918 5.80361 7.23463 5.65224C7.60008 5.50086 8.00222 5.46126 8.39018 5.53843C8.77814 5.6156 9.1345 5.80608 9.41421 6.08578C9.69391 6.36549 9.8844 6.72186 9.96157 7.10982C10.0387 7.49778 9.99913 7.89991 9.84776 8.26536C9.69638 8.63082 9.44004 8.94317 9.11114 9.16294C8.78224 9.3827 8.39556 9.5 8 9.5C7.46956 9.5 6.96086 9.28928 6.58578 8.91421C6.21071 8.53914 6 8.03043 6 7.5ZM12.11 11.6506C11.5524 10.8425 10.7682 10.2174 9.85625 9.85375C10.3461 9.4679 10.7036 8.93899 10.879 8.34056C11.0543 7.74213 11.0388 7.10393 10.8346 6.51471C10.6305 5.9255 10.2477 5.41455 9.73971 5.05293C9.23168 4.69131 8.62359 4.49698 8 4.49698C7.37641 4.49698 6.76832 4.69131 6.26029 5.05293C5.75226 5.41455 5.36954 5.9255 5.16536 6.51471C4.96119 7.10393 4.94569 7.74213 5.12104 8.34056C5.29639 8.93899 5.65386 9.4679 6.14375 9.85375C5.23176 10.2174 4.44764 10.8425 3.89 11.6506C3.18535 10.8582 2.72479 9.87902 2.56378 8.83094C2.40276 7.78285 2.54815 6.71056 2.98245 5.74318C3.41674 4.77581 4.12142 3.95461 5.01163 3.37846C5.90183 2.80231 6.93961 2.49578 8 2.49578C9.06038 2.49578 10.0982 2.80231 10.9884 3.37846C11.8786 3.95461 12.5833 4.77581 13.0175 5.74318C13.4518 6.71056 13.5972 7.78285 13.4362 8.83094C13.2752 9.87902 12.8146 10.8582 12.11 11.6506Z" fill="#070C11" fill-opacity="0.3"></path>
+                </svg>
+              </div>
+              <span class="qa-card__assigned">Assigned to: Legal Team</span>
+            </div>
+            <div class="qa-card__status">
+              <div class="qa-card__status-dot qa-card__status-dot--pending"></div>
+              <span class="qa-card__status-text">Pending</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.body.addEventListener('click', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'bento-card-click' }, '*');
+      }
+    });
+  </script>
+</body></html>

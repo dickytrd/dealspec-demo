@@ -1,0 +1,2450 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Software Overview - Dealspec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist';
+      src: url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/Geist-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #01070e;
+      --bg-footer: #01070e;
+      --bg-light: #fafaf9;
+      --bg-card: #f5f5f5;
+      --fg-dark: #070c11;
+      --fg-muted: rgba(7, 12, 17, 0.5);
+      --fg-muted-60: rgba(7, 12, 17, 0.6);
+      --fg-muted-10: rgba(7, 12, 17, 0.1);
+      --fg-muted-30: rgba(7, 12, 17, 0.3);
+      --white: #ffffff;
+      --white-muted: rgba(255, 255, 255, 0.5);
+      --white-muted-60: rgba(255, 255, 255, 0.6);
+      --white-muted-10: rgba(255, 255, 255, 0.1);
+      --white-muted-05: rgba(255, 255, 255, 0.05);
+      --accent-blue: rgba(47, 78, 199, 0.1);
+      --font-display: 'Libertinus Serif Display', Georgia, serif;
+      --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: none;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--fg-dark);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%;
+      max-width: none;
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+       HERO SECTION - Software Overview style
+       ======================================== */
+    .hero {
+      background: var(--bg-dark);
+      height: 772px;
+      padding-top: 72px;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 80px;
+    }
+
+    .hero-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      flex: 1;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      min-width: 1440px;
+      height: 100%;
+      pointer-events: none;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* ===================== NAVBAR WRAPPER - FLOATING GLASSMORPHIC ===================== */
+    .navbar-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 40px;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      transition: padding 300ms ease, transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+    }
+
+    .navbar-wrapper.hidden {
+      transform: translateY(-120px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Maintain same top gap when scrolled */
+    .navbar-wrapper:has(.navbar.scrolled) {
+      padding: 0 40px;
+    }
+
+    .navbar {
+      pointer-events: auto;
+      width: 100%;
+      max-width: 1440px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      transition: background 300ms ease, backdrop-filter 300ms ease, box-shadow 300ms ease, border-color 300ms ease, border-radius 300ms ease;
+    }
+
+    /* Smooth transitions for all navbar theme-adaptive elements */
+    .navbar .logo img,
+    .navbar .nav-link,
+    .navbar .nav-link svg path,
+    .navbar .nav-divider,
+    .navbar .nav-login,
+    .navbar .btn-ghost,
+    .navbar .mobile-menu-btn,
+    .navbar .mobile-menu-btn svg {
+      transition: color 300ms ease, background 300ms ease, border-color 300ms ease, filter 300ms ease, stroke 300ms ease;
+    }
+
+    .navbar.scrolled {
+      border-radius: 16px;
+    }
+
+    /* Default state (dark theme - over hero/dark sections) - TRANSPARENT */
+    .navbar[data-theme="dark"] {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid transparent;
+    }
+
+    /* Scrolled state - show glassmorphic wrapper */
+    .navbar[data-theme="dark"].scrolled {
+      background: rgba(1, 7, 14, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    }
+
+    .navbar[data-theme="dark"] .logo img {
+      filter: none;
+    }
+
+    .navbar[data-theme="dark"] .nav-link {
+      color: var(--white);
+    }
+
+    .navbar[data-theme="dark"] .nav-link svg path {
+      stroke: white;
+    }
+
+    .navbar[data-theme="dark"] .nav-divider {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .navbar[data-theme="dark"] .nav-login {
+      color: var(--white);
+    }
+
+    .navbar[data-theme="dark"] .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="dark"] .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar[data-theme="dark"] .mobile-menu-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="dark"] .mobile-menu-btn svg {
+      stroke: var(--white);
+    }
+
+    /* Light theme - over light sections - TRANSPARENT by default */
+    .navbar[data-theme="light"] {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid transparent;
+    }
+
+    /* Scrolled state - show glassmorphic wrapper */
+    .navbar[data-theme="light"].scrolled {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(7, 12, 17, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .navbar[data-theme="light"] .logo img {
+      filter: brightness(0);
+    }
+
+    .navbar[data-theme="light"] .nav-link {
+      color: var(--fg-dark);
+    }
+
+    .navbar[data-theme="light"] .nav-link svg path {
+      stroke: var(--fg-dark);
+    }
+
+    .navbar[data-theme="light"] .nav-divider {
+      background: rgba(7, 12, 17, 0.15);
+    }
+
+    .navbar[data-theme="light"] .nav-login {
+      color: var(--fg-dark);
+    }
+
+    .navbar[data-theme="light"] .btn-ghost {
+      background: rgba(7, 12, 17, 0.05);
+      border-color: rgba(7, 12, 17, 0.1);
+      color: var(--fg-dark);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="light"] .btn-ghost:hover {
+      background: rgba(7, 12, 17, 0.15);
+      border-color: rgba(7, 12, 17, 0.5);
+    }
+
+    .navbar[data-theme="light"] .mobile-menu-btn {
+      background: rgba(7, 12, 17, 0.05);
+      border-color: rgba(7, 12, 17, 0.1);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="light"] .mobile-menu-btn svg {
+      stroke: var(--fg-dark);
+    }
+
+    /* Fallback for no data-theme (defaults to dark) */
+    .navbar:not([data-theme]) {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .navbar:not([data-theme]).scrolled,
+    .navbar.scrolled:not([data-theme]) {
+      background: rgba(1, 7, 14, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    }
+
+    /* ===================== MOBILE MENU SYSTEM ===================== */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(1, 7, 14, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms ease, visibility 300ms ease;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-height: 100vh;
+      background: var(--bg-dark);
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .mobile-menu.is-active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-menu-header .logo {
+      width: 140px;
+      height: 34px;
+    }
+
+    .mobile-menu-header .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: none !important; /* Always white in mobile menu */
+    }
+
+    .mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      border-radius: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+
+    .mobile-menu-close:hover {
+      background: var(--white-muted-10);
+      border-color: var(--white-muted-60);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
+    }
+
+    .mobile-menu-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .mobile-menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 0;
+      transition: background 150ms ease;
+    }
+
+    .mobile-menu-link:hover {
+      background: var(--white-muted-05);
+    }
+
+    .mobile-menu-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: rgba(255, 255, 255, 0.4);
+      transform: rotate(-90deg);
+    }
+
+    .mobile-menu-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+    }
+
+    .mobile-menu-cta {
+      flex: 1;
+      padding: 14px 20px;
+      background: var(--white);
+      color: var(--fg-dark);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mobile-menu-cta:hover {
+      background: #2F6FEB;
+      color: white;
+    }
+
+    .mobile-menu-login {
+      flex: 1;
+      padding: 14px 20px;
+      background: transparent;
+      border: 1px solid var(--white-muted-10);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mobile-menu-login:hover {
+      background: var(--white-muted-05);
+      border-color: var(--white-muted-60);
+    }
+
+    /* Hamburger to X animation */
+    .mobile-menu-btn.is-active svg line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+      transform-origin: center;
+    }
+
+    .mobile-menu-btn.is-active svg line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-btn.is-active svg line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+      transform-origin: center;
+    }
+
+    .mobile-menu-btn svg line {
+      transition: transform 200ms ease, opacity 200ms ease;
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    .navbar-container {
+      width: 100%;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .logo {
+      width: 169px;
+      height: 40px;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 300ms ease;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      transition: background 300ms ease;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      opacity: 0.5;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 300ms ease, opacity 0.2s ease;
+    }
+
+    .nav-link:hover {
+      opacity: 0.7;
+    }
+
+    .nav-link svg {
+      width: 7px;
+      height: 3.3px;
+    }
+
+    .nav-link svg path {
+      transition: stroke 300ms ease;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-login {
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      text-decoration: none;
+      transition: color 300ms ease, opacity 0.2s ease;
+    }
+
+    .nav-login:hover {
+      opacity: 0.7;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ghost {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      padding: 10px 20px;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+      cursor: pointer;
+      transition: background 300ms ease, border-color 300ms ease, color 300ms ease;
+    }
+
+    .btn-lang {
+      width: 39px;
+      height: 24px;
+    }
+
+    .btn-lang img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-menu-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -1.28px;
+      width: 500px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      width: 420px;
+    }
+
+    /* ========================================
+       BENEFITS SECTION
+       ======================================== */
+    .section {
+      background: var(--bg-light);
+      padding: 80px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .section-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--fg-dark);
+      letter-spacing: -1.28px;
+      line-height: 1.1;
+      max-width: 800px;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      max-width: 660px;
+      margin-top: 8px;
+    }
+
+    .benefits-grid {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .benefit-card {
+      width: 392px;
+      height: 300px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .benefit-card-dark {
+      background: var(--bg-dark);
+    }
+
+    .benefit-card-dark .benefit-card-bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .benefit-card-light {
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card-bg {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 60%;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+      overflow: visible;
+    }
+
+    .benefit-card-bg img {
+      width: 100%;
+      height: auto;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transform: scaleY(-1);
+    }
+
+    .benefit-card-light:hover {
+      background: var(--bg-dark);
+      border-color: var(--bg-dark);
+    }
+
+    .benefit-card-light:hover .benefit-card-bg {
+      opacity: 1;
+    }
+
+    .benefit-card-light:hover .benefit-title {
+      color: var(--white);
+    }
+
+    .benefit-card-light:hover .benefit-desc {
+      color: var(--white-muted-60);
+    }
+
+    .benefit-card-light:hover .benefit-icon img {
+      filter: brightness(0) invert(1);
+    }
+
+    .benefit-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--accent-blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    .benefit-icon img {
+      width: 32px;
+      height: 32px;
+      transition: filter 0.3s ease;
+    }
+
+    .benefit-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .benefit-title {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.24px;
+      line-height: 1.4;
+    }
+
+    .benefit-card-dark .benefit-title {
+      color: var(--white);
+    }
+
+    .benefit-card-light .benefit-title {
+      color: var(--fg-dark);
+      transition: color 0.3s ease;
+    }
+
+    .benefit-desc {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .benefit-card-dark .benefit-desc {
+      color: var(--white-muted-60);
+    }
+
+    .benefit-card-light .benefit-desc {
+      color: var(--fg-muted-60);
+      transition: color 0.3s ease;
+    }
+
+    /* ========================================
+       PLATFORM SECTION
+       ======================================== */
+    .platform-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .platform-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .platform-card-link {
+      flex: 1;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .platform-card-link:hover {
+      transform: translateY(-4px);
+    }
+
+    .platform-card-link:hover .platform-card {
+      border-color: var(--fg-muted-30);
+      box-shadow: 8px 8px 20px 0px rgba(0, 0, 0, 0.12);
+    }
+
+
+    .platform-card {
+      flex: 1;
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+      padding: 8px 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow: hidden;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+
+
+    .platform-image {
+      width: 275px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .platform-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 8px;
+    }
+
+    .platform-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .platform-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    /* ========================================
+       FAQ SECTION
+       ======================================== */
+    .faq-section {
+      background: var(--bg-light);
+      padding: 80px 120px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
+      width: 100%;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--fg-muted-10);
+      padding-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      width: 800px;
+      cursor: pointer;
+    }
+
+    .faq-question-text {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .faq-icon img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .faq-answer {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      display: none;
+      width: 800px;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* ========================================
+       CTA SECTION
+       ======================================== */
+    .cta-section {
+      background: var(--bg-light);
+      padding: 80px 0;
+      width: 100%;
+    }
+
+    .cta-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+    }
+
+    .cta-banner {
+      background: var(--bg-footer);
+      height: 400px;
+      padding: 60px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cta-bg img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cta-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .cta-label {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -1.28px;
+      line-height: 1.2;
+      max-width: 750px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      padding: 15px 30px;
+      color: var(--fg-dark);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.16px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #2F6FEB;
+      color: var(--white);
+    }
+
+    .btn-secondary {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      padding: 15px 30px;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.16px;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    .footer {
+      background: var(--bg-footer);
+      padding: 80px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 150px;
+      height: 600px;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .footer-bg {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) scaleY(-1);
+      top: 70px;
+      width: 1260px;
+      height: 600px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .footer-bg-lines {
+      top: -617px;
+      height: 1287px;
+    }
+
+    .footer-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 150px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      width: 169px;
+      height: 40px;
+    }
+
+    .footer-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .footer-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      width: 350px;
+    }
+
+    .footer-newsletter {
+      backdrop-filter: blur(3px);
+      background: var(--white-muted-10);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 6px 6px 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 350px;
+    }
+
+    .footer-newsletter-input {
+      flex: 1;
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -0.14px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .footer-newsletter-input::placeholder {
+      color: var(--white-muted);
+    }
+
+    .footer-newsletter-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+
+    .footer-newsletter-btn img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 120px;
+    }
+
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-column-title {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.2px;
+      line-height: 1.4;
+    }
+
+    .footer-column-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+
+    .footer-link:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+
+    .footer-bottom-link:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      display: flex;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-bottom span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
+    /* ========================================
+       RESPONSIVE STYLES
+       ======================================== */
+
+    /* Tablet Landscape (1024px - 1279px) */
+    @media (max-width: 1279px) {
+      .navbar-container {
+        padding: 0 80px;
+      }
+
+      .hero {
+        height: auto;
+        min-height: 672px;
+        padding-bottom: 60px;
+      }
+
+      .hero-inner {
+        padding: 0 80px;
+      }
+
+      .section {
+        padding: 60px 80px;
+        gap: 60px;
+      }
+
+      .benefits-grid {
+        flex-wrap: wrap;
+      }
+
+      .benefit-card {
+        width: calc(50% - 6px);
+        min-width: 300px;
+      }
+
+      .platform-row {
+        flex-wrap: wrap;
+      }
+
+      .platform-card-link {
+        width: calc(50% - 6px);
+        min-width: 280px;
+      }
+
+      .faq-section {
+        padding: 60px 80px 100px;
+      }
+
+      .cta-section {
+        padding: 60px 0 100px;
+      }
+
+      .cta-inner {
+        padding: 0 80px;
+      }
+
+      .footer {
+        padding: 60px 0;
+        height: auto;
+        min-height: 500px;
+      }
+
+      .footer-inner {
+        padding: 0 60px;
+        gap: 100px;
+      }
+
+      .footer-links {
+        gap: 60px;
+      }
+    }
+
+    /* Tablet Portrait (768px - 1023px) */
+    @media (max-width: 1023px) {
+      /* === NAVBAR === */
+      .navbar-wrapper {
+        padding: 0 16px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 0 16px;
+      }
+
+      .navbar {
+        height: 52px;
+      }
+
+      .navbar.scrolled {
+        border-radius: 14px;
+      }
+
+      .navbar-container {
+        padding: 0 16px;
+      }
+
+      .nav-links,
+      .nav-divider {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .nav-buttons,
+      .btn-ghost,
+      .btn-lang {
+        display: none;
+      }
+
+      /* === HERO === */
+      .hero {
+        min-height: 622px;
+        padding-bottom: 60px;
+      }
+
+      .hero-inner {
+        padding: 0 32px;
+      }
+
+      .hero-content {
+        flex-direction: column;
+        gap: 32px;
+        align-items: flex-start;
+      }
+
+      .hero-headline {
+        font-size: 48px;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .hero-subtitle {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      /* === SECTIONS === */
+      .section {
+        padding: 60px 32px;
+        gap: 50px;
+      }
+
+      .section-title {
+        font-size: 48px;
+        letter-spacing: -0.96px;
+      }
+
+      .benefits-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .benefit-card {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .platform-card-link {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .platform-image {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .faq-section {
+        padding: 60px 32px 80px;
+      }
+
+      .faq-question,
+      .faq-answer {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .cta-section {
+        padding: 60px 0 80px;
+      }
+
+      .cta-inner {
+        padding: 0 32px;
+      }
+
+      .cta-banner {
+        height: auto;
+        min-height: 350px;
+        padding: 40px 32px;
+      }
+
+      .cta-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+      }
+
+      .cta-title {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .footer {
+        padding: 60px 0;
+        height: auto;
+        gap: 60px;
+      }
+
+      .footer-inner {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 32px;
+        gap: 60px;
+      }
+
+      .footer-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer-links {
+        width: 100% !important;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .footer-left {
+        width: 100%;
+      }
+
+      .footer-desc,
+      .footer-newsletter {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .footer-bottom {
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+      }
+    }
+
+    /* Mobile (< 768px) */
+    @media (max-width: 767px) {
+      /* === NAVBAR === */
+      .navbar-wrapper {
+        padding: 0 16px;
+        top: 12px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 0 16px;
+      }
+
+      .navbar {
+        height: 48px;
+      }
+
+      .navbar.scrolled {
+        border-radius: 12px;
+      }
+
+      .navbar-container {
+        padding: 0 12px;
+      }
+
+      .logo {
+        width: 118px;
+        height: 28px;
+      }
+
+      .navbar-right {
+        gap: 12px;
+      }
+
+      .nav-login {
+        display: none;
+      }
+
+      .btn-ghost {
+        display: none;
+      }
+
+      /* === HERO === */
+      .hero {
+        min-height: 522px;
+        padding-bottom: 40px;
+      }
+
+      .hero-inner {
+        padding: 0 16px;
+      }
+
+      .hero-bg,
+      .footer-bg,
+      .footer-bg-lines {
+        display: none;
+      }
+
+      .hero-bg {
+        min-width: unset;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .hero-headline {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      /* === SECTIONS === */
+      .section {
+        padding: 40px 16px;
+        gap: 40px;
+      }
+
+      .section-label {
+        font-size: 14px;
+      }
+
+      .section-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .section-subtitle {
+        font-size: 14px;
+      }
+
+      .benefits-grid {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .benefit-card {
+        width: 100%;
+        height: auto;
+        min-height: 280px;
+        padding: 20px;
+      }
+
+      .benefit-title {
+        font-size: 20px;
+      }
+
+      .benefit-desc {
+        font-size: 14px;
+      }
+
+      .platform-grid {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .platform-card-link {
+        width: 100%;
+      }
+
+      .platform-card {
+        padding: 12px;
+      }
+
+      .platform-image {
+        height: 180px;
+        width: 100%;
+      }
+
+      .platform-title {
+        font-size: 18px;
+      }
+
+      .platform-desc {
+        font-size: 14px;
+      }
+
+      .faq-section {
+        padding: 40px 16px 60px;
+        gap: 40px;
+      }
+
+      .faq-question {
+        width: 100%;
+      }
+
+      .faq-question-text {
+        font-size: 18px;
+      }
+
+      .faq-answer {
+        width: 100%;
+        font-size: 14px;
+      }
+
+      .cta-section {
+        padding: 40px 0 60px;
+      }
+
+      .cta-inner {
+        padding: 0 16px;
+      }
+
+      .cta-banner {
+        padding: 32px 16px;
+        min-height: 300px;
+      }
+
+      .cta-label {
+        font-size: 14px;
+      }
+
+      .cta-title {
+        font-size: 28px;
+        letter-spacing: -0.56px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        text-align: center;
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+
+      .footer {
+        padding: 40px 0;
+        gap: 40px;
+      }
+
+      .footer-inner {
+        padding: 0 16px;
+        gap: 40px;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .footer-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer-left {
+        width: 100%;
+      }
+
+      .footer-brand {
+        width: 100%;
+        gap: 16px;
+      }
+
+      .footer-logo {
+        width: 130px;
+        height: 32px;
+      }
+
+      .footer-desc {
+        font-size: 14px;
+        max-width: 100%;
+      }
+
+      .footer-newsletter {
+        max-width: 100%;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-newsletter-input,
+      .footer-newsletter-btn {
+        width: 100%;
+      }
+
+      .footer-links {
+        width: 100% !important;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .footer-column {
+        width: 100%;
+      }
+
+      .footer-column-title {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+
+      .footer-link {
+        font-size: 14px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+      }
+
+      .footer-bottom span {
+        font-size: 14px;
+      }
+    }
+
+    /* Large screens (1600px+) */
+    @media (min-width: 1600px) {
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 24px 80px;
+      }
+      .navbar {
+        max-width: 1400px;
+      }
+      .navbar-container {
+        padding: 0 40px;
+      }
+
+      .hero-inner {
+        max-width: 1600px;
+        padding: 0 80px;
+      }
+
+      .benefit-card {
+        width: 450px;
+      }
+
+      .footer-inner {
+        max-width: 1440px;
+        padding: 0 80px;
+      }
+    }
+
+    /* Extra large screens (1920px+) */
+    @media (min-width: 1920px) {
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 28px 100px;
+      }
+      .navbar {
+        max-width: 1680px;
+      }
+      .navbar-container {
+        padding: 0 48px;
+      }
+
+      .hero-inner {
+        max-width: 1800px;
+        padding: 0 60px;
+      }
+
+      .hero {
+        padding-bottom: 100px;
+      }
+
+      .section {
+        padding: 100px 80px;
+      }
+
+      .hero-bg,
+      .footer-bg,
+      .footer-bg-lines {
+        width: 1600px;
+      }
+
+      .hero-bg {
+        min-width: 1920px;
+      }
+
+      .footer-inner {
+        max-width: 1680px;
+        padding: 0 100px;
+      }
+
+      .hero-headline {
+        font-size: 80px;
+      }
+
+      .section-title {
+        font-size: 72px;
+      }
+
+      .benefit-card {
+        width: 500px;
+        height: 350px;
+      }
+
+      .cta-title {
+        font-size: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Floating Navbar Wrapper -->
+    <div class="navbar-wrapper">
+      <nav class="navbar" data-theme="dark" role="navigation" aria-label="Main navigation" style="border-radius: 0px; height: 60px;">
+        <div class="navbar-container">
+          <div class="navbar-left">
+            <a href="dealspec-homepage.html" class="logo">
+              <img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+            </a>
+            <div class="nav-divider"></div>
+            <div class="nav-links">
+              <a href="dealspec-homepage.html" class="nav-link">Home</a>
+              <a href="software-overview.html" class="nav-link">
+                Software
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="#" class="nav-link">
+                Services
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="#" class="nav-link">
+                Unternehmen
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+              <a href="#" class="nav-link">
+                Ressourcen
+                <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5"></path></svg>
+              </a>
+            </div>
+          </div>
+          <div class="navbar-right">
+            <a href="#" class="nav-login">Log In</a>
+            <div class="nav-buttons">
+              <button class="btn-ghost">Get in Touch</button>
+              <div class="btn-lang">
+                <img src="assets/figma/67eb260f896fb52385d8a77d199101f392bd8a35.svg" alt="Language">
+              </div>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" aria-hidden="true"></div>
+
+    <!-- Mobile Menu Panel -->
+    <aside id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+      <div class="mobile-menu-header">
+        <a href="dealspec-homepage.html" class="logo">
+          <img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+        </a>
+        <button class="mobile-menu-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="6" y1="18" x2="18" y2="6"></line>
+          </svg>
+        </button>
+        </div>
+        <nav class="mobile-menu-nav">
+          <a href="dealspec-homepage.html" class="mobile-menu-link">Home</a>
+          <a href="software-overview.html" class="mobile-menu-link">
+            Software
+            <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+          <a href="#" class="mobile-menu-link">
+            Services
+            <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+          <a href="#" class="mobile-menu-link">
+            Unternehmen
+            <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+          <a href="#" class="mobile-menu-link">
+            Ressourcen
+            <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+        </nav>
+      <div class="mobile-menu-footer">
+        <button class="mobile-menu-cta">Get in Touch</button>
+        <button class="mobile-menu-login">Log In</button>
+      </div>
+    </aside>
+
+    <!-- HERO SECTION -->
+    <section class="hero" data-od-id="hero" data-theme="dark">
+      <img class="hero-bg" src="assets/backgrounds/bg-hero.png" alt="">
+
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="hero-headline">A smarter way to manage M&amp;A deals</h1>
+          <p class="hero-subtitle">Dealspec is a data- and AI-enabled platform designed to streamline deal management, improve collaboration, and enhance transaction quality across the M&amp;A process.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+    <section class="section" data-od-id="benefits" data-theme="light">
+      <div class="section-header">
+        <span class="section-label">Benefits</span>
+        <h2 class="section-title">Built to improve every stage of your deal process</h2>
+      </div>
+      <div class="benefits-grid" style="width: 1200px;">
+        <div class="benefit-card benefit-card-light">
+          <div class="benefit-card-bg">
+            <img src="assets/figma/20e1e500c6539c23085677d7928fad9acafebda9.svg" alt="">
+          </div>
+          <div class="benefit-icon">
+            <img src="assets/figma/00aee0eb9a953216622a4e0a0d33c2a36d6b7171.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Improve deal efficiency</h3>
+            <p class="benefit-desc">Streamline workflows and reduce manual processes across your deal lifecycle.</p>
+          </div>
+        </div>
+        <div class="benefit-card benefit-card-light">
+          <div class="benefit-card-bg">
+            <img src="assets/figma/20e1e500c6539c23085677d7928fad9acafebda9.svg" alt="">
+          </div>
+          <div class="benefit-icon">
+            <img src="assets/figma/7a741ff63816f728d196c21c18ec72dc696a2f33.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Enhance collaboration</h3>
+            <p class="benefit-desc">Keep all stakeholders aligned with centralized data and shared workflows.</p>
+          </div>
+        </div>
+        <div class="benefit-card benefit-card-light">
+          <div class="benefit-card-bg">
+            <img src="assets/figma/20e1e500c6539c23085677d7928fad9acafebda9.svg" alt="">
+          </div>
+          <div class="benefit-icon">
+            <img src="assets/figma/534d6c2d22a92b3ce8a8d3d5dd6e303bc1cc527d.svg" alt="">
+          </div>
+          <div class="benefit-content">
+            <h3 class="benefit-title">Increase transaction quality</h3>
+            <p class="benefit-desc">Leverage structured data and analytics to make better decisions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLATFORM SECTION -->
+    <section class="section" data-od-id="platform" data-theme="light">
+      <div class="section-header">
+        <span class="section-label">The Platform</span>
+        <h2 class="section-title">Everything you need to manage the full deal lifecycle</h2>
+      </div>
+      <div class="platform-grid" style="width: 1200px;">
+        <div class="platform-row" style="width: 1200px;">
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/company-finder.svg" alt="Company Finder">
+              <div class="platform-content">
+                <h3 class="platform-title">Company Finder</h3>
+                <p class="platform-desc">Identify relevant companies based on structured data and deal-specific criteria.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/buyer-group.svg" alt="Buyer Group Identification">
+              <div class="platform-content">
+                <h3 class="platform-title">Buyer Group Identification</h3>
+                <p class="platform-desc">Discover and segment potential buyers aligned with your deal strategy.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/long-list-creation.svg" alt="Long List Creation">
+              <div class="platform-content">
+                <h3 class="platform-title">Long List Creation</h3>
+                <p class="platform-desc">Generate and manage long lists using real-time data and intelligent filtering.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/deal-management.svg" alt="Deal Management">
+              <div class="platform-content">
+                <h3 class="platform-title">Deal Management</h3>
+                <p class="platform-desc">Track deal progress, monitor key metrics, and stay in control of your transactions.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="platform-row">
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/qa-management.svg" alt="Q&amp;A Management">
+              <div class="platform-content">
+                <h3 class="platform-title">Q&amp;A Management</h3>
+                <p class="platform-desc">Structure communication and due diligence processes across all stakeholders.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/doc-management.svg" alt="Document Management">
+              <div class="platform-content">
+                <h3 class="platform-title">Document Management</h3>
+                <p class="platform-desc">Store, organize, and access all deal-related documents in a secure environment.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/centralized-data.svg" alt="Centralized Data Flow">
+              <div class="platform-content">
+                <h3 class="platform-title">Centralized Data Flow</h3>
+                <p class="platform-desc">Bring together your data from multiple tools into one structured platform.</p>
+              </div>
+            </div>
+          </a>
+          <a href="software-detail.html" class="platform-card-link">
+            <div class="platform-card">
+              <img class="platform-image" src="assets/icons/advanced-analytics.svg" alt="Advanced Analytics">
+              <div class="platform-content">
+                <h3 class="platform-title">Advanced Analytics</h3>
+                <p class="platform-desc">Gain real-time insights into deal performance and key transaction metrics.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section" data-od-id="faq" data-theme="light">
+      <div class="section-header">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Answers to common questions about Dealspec</h2>
+        <p class="section-subtitle">Learn more about how Dealspec supports structured deal workflows, operational efficiency, and scalable transaction management across your organization.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <div class="faq-question">
+            <span class="faq-question-text">What is Dealspec?</span>
+            <div class="faq-icon">
+              <img src="assets/figma/0c1cb3c92862a850f4e64206aef9182820820c41.svg" alt="">
+            </div>
+          </div>
+          <p class="faq-answer">Dealspec is an AI-powered M&amp;A workflow platform designed to help teams streamline sourcing, due diligence, deal management, and operational execution within one structured environment.</p>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Who is Dealspec built for?</span>
+            <div class="faq-icon">
+              <img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Can Dealspec integrate with our existing tools?</span>
+            <div class="faq-icon">
+              <img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">Does Dealspec support customizable workflows?</span>
+            <div class="faq-icon">
+              <img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-question-text">How does Dealspec improve operational efficiency?</span>
+            <div class="faq-icon">
+              <img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section" data-od-id="cta" data-theme="dark">
+      <div class="cta-inner">
+        <div class="cta-banner">
+          <div class="cta-bg"><img src="assets/backgrounds/bg-callout.png" alt=""></div>
+          <div class="cta-content">
+            <div class="cta-text">
+              <p class="cta-label">Start your journey</p>
+              <h2 class="cta-title">Clarity for every deal. Confidence in every decision.</h2>
+            </div>
+            <div class="cta-buttons">
+              <button class="btn-primary">Book a demo</button>
+              <button class="btn-secondary">Talk to us</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" data-od-id="footer" data-theme="dark">
+      <img class="footer-bg" src="assets/figma/645afcb2bfb5961945b434e9f5fe915b6b8f3f48.svg" alt="">
+      <img class="footer-bg footer-bg-lines" src="assets/figma/586ab8abb1fc0a40bd076cf581546ebe0b0a5372.svg" alt="">
+
+      <div class="footer-inner">
+        <div class="footer-content">
+          <div class="footer-left">
+            <div class="footer-brand">
+              <div class="footer-logo"><img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec"></div>
+              <p class="footer-desc">An AI-powered platform designed to streamline M&amp;A workflows, centralize data, and support better deal decisions.</p>
+            </div>
+            <div class="footer-newsletter">
+              <input type="email" class="footer-newsletter-input" placeholder="Enter your email">
+              <button class="footer-newsletter-btn">
+                <img src="assets/figma/9dd67efbabbd6099058bc5258c32d6468cad89b6.svg" alt="Submit">
+              </button>
+            </div>
+          </div>
+          <div class="footer-links">
+            <div class="footer-column">
+              <h4 class="footer-column-title">Product</h4>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">Overview</a>
+                <a href="#" class="footer-link">Features</a>
+                <a href="#" class="footer-link">Integrations</a>
+                <a href="#" class="footer-link">Pricing</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <h4 class="footer-column-title">Company</h4>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Careers</a>
+                <a href="#" class="footer-link">Press</a>
+                <a href="#" class="footer-link">Contact</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <h4 class="footer-column-title">Resources</h4>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">Insights</a>
+                <a href="#" class="footer-link">Help Center</a>
+                <a href="#" class="footer-link">Guides</a>
+                <a href="#" class="footer-link">Case Studies</a>
+              </div>
+            </div>
+            <div class="footer-column">
+              <h4 class="footer-column-title">Connect</h4>
+              <div class="footer-column-links">
+                <a href="#" class="footer-link">LinkedIn</a>
+                <a href="#" class="footer-link">X</a>
+                <a href="#" class="footer-link">YouTube</a>
+                <a href="#" class="footer-link">Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Dealspec. All right reserved</span>
+          <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          <a href="#" class="footer-bottom-link">Terms of Service</a>
+          <a href="#" class="footer-bottom-link">Imprint</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ===================== NAVBAR SCROLL SYSTEM =====================
+      const navbar = document.querySelector('.navbar');
+      const navbarWrapper = document.querySelector('.navbar-wrapper');
+      let lastScrollY = 0;
+      let isHidden = false;
+      const hideThreshold = 100;
+
+      // Get all sections with data-theme attribute for theme detection
+      const themedSections = document.querySelectorAll('[data-theme]');
+      let currentTheme = 'dark';
+
+      // Detect which section the navbar is over
+      function detectTheme() {
+        const navbarRect = navbarWrapper.getBoundingClientRect();
+        const navbarMidpoint = navbarRect.top + (navbarRect.height / 2);
+
+        let detectedTheme = 'dark'; // default
+
+        for (const section of themedSections) {
+          const rect = section.getBoundingClientRect();
+          // Check if navbar midpoint is within this section
+          if (navbarMidpoint >= rect.top && navbarMidpoint <= rect.bottom) {
+            detectedTheme = section.dataset.theme || 'dark';
+            break;
+          }
+        }
+
+        // Only update if theme changed to avoid unnecessary reflows
+        if (detectedTheme !== currentTheme) {
+          currentTheme = detectedTheme;
+          navbar.dataset.theme = detectedTheme;
+        }
+      }
+
+      // Scroll handler - adds scrolled class, updates theme, and handles auto-hide
+      function handleScroll() {
+        const scrollY = window.scrollY;
+        const scrollDelta = scrollY - lastScrollY;
+
+        // Add/remove scrolled class
+        if (scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+
+        // Auto-hide logic: hide on scroll down, reveal on scroll up
+        if (scrollY > hideThreshold) {
+          if (scrollDelta > 0 && !isHidden) {
+            navbarWrapper.classList.add('hidden');
+            isHidden = true;
+          } else if (scrollDelta < 0 && isHidden) {
+            navbarWrapper.classList.remove('hidden');
+            isHidden = false;
+          }
+        } else {
+          navbarWrapper.classList.remove('hidden');
+          isHidden = false;
+        }
+
+        lastScrollY = scrollY;
+
+        // Detect theme based on which section navbar is over
+        detectTheme();
+      }
+
+      // Throttled scroll listener
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Initial call
+      handleScroll();
+
+      // ===================== MOBILE MENU SYSTEM =====================
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+      const mobileMenuClose = document.querySelector('.mobile-menu-close');
+
+      function openMenu() {
+        mobileMenuBtn.classList.add('is-active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.setAttribute('aria-label', 'Close menu');
+        mobileMenu.classList.add('is-active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileMenuOverlay.classList.add('is-active');
+        mobileMenuOverlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('menu-open');
+
+        // Focus trap - focus first link
+        const firstLink = mobileMenu.querySelector('.mobile-menu-link');
+        if (firstLink) firstLink.focus();
+      }
+
+      function closeMenu() {
+        mobileMenuBtn.classList.remove('is-active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'Open menu');
+        mobileMenu.classList.remove('is-active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenuOverlay.classList.remove('is-active');
+        mobileMenuOverlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-open');
+
+        // Return focus to menu button
+        mobileMenuBtn.focus();
+      }
+
+      function toggleMenu() {
+        if (mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      }
+
+      // Event listeners
+      mobileMenuBtn.addEventListener('click', toggleMenu);
+      mobileMenuClose.addEventListener('click', closeMenu);
+      mobileMenuOverlay.addEventListener('click', closeMenu);
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        }
+      });
+
+      // Close menu on resize to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 1023 && mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        }
+      });
+
+      // ===================== FAQ TOGGLE =====================
+      document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+          const item = question.parentElement;
+          item.classList.toggle('open');
+        });
+      });
+
+    })();
+  </script>
+
+</body></html>
