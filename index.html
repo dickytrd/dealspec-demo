@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!doctype html>
+<html lang="en"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dealspec - 10x your dealmaking</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Libertinus+Serif+Display&amp;display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'Geist';
@@ -57,8 +56,14 @@
       --white-muted-60: rgba(255, 255, 255, 0.6);
       --white-muted-10: rgba(255, 255, 255, 0.1);
       --white-muted-05: rgba(255, 255, 255, 0.05);
-      --font-display: 'Libre Baskerville', Georgia, serif;
+      --font-display: 'Libertinus Serif Display', Georgia, serif;
       --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: none;
+      overflow-x: hidden;
     }
 
     body {
@@ -71,15 +76,21 @@
 
     .page {
       width: 100%;
-      max-width: 1440px;
-      margin: 0 auto;
+      max-width: none;
       overflow-x: hidden;
     }
 
-    /* Hero Section */
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+    }
+
     .hero {
       background: var(--bg-dark);
-      height: 1120px;
+      height: 1192px;
+      padding-top: 72px;
       position: relative;
       overflow: hidden;
       width: 100%;
@@ -87,52 +98,691 @@
 
     .hero-bg {
       position: absolute;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
-      top: 0;
-      width: 1440px;
+      width: 100%;
+      min-width: 1440px;
       height: 100%;
+      pointer-events: none;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* ===================== NAVBAR WRAPPER - FLOATING GLASSMORPHIC ===================== */
+    .navbar-wrapper {
+      position: fixed;
+      top: 16px;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 16px;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      transition: padding 300ms ease, transform 300ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+    }
+
+    .navbar-wrapper.hidden {
+      transform: translateY(-120px);
+      opacity: 0;
       pointer-events: none;
     }
 
-    .hero-bg-lines {
-      position: absolute;
-      left: 90px;
+    /* Maintain same top gap when scrolled */
+    .navbar-wrapper:has(.navbar.scrolled) {
       top: 0;
-      width: 1260px;
-      height: 1100px;
-      opacity: 0.3;
+      padding: 0 16px;
     }
 
-    /* Navbar */
     .navbar {
+      pointer-events: auto;
+      width: 100%;
+      max-width: 1440px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      transition: background 300ms ease, backdrop-filter 300ms ease, box-shadow 300ms ease, border-color 300ms ease, border-radius 300ms ease;
+    }
+
+    /* Smooth transitions for all navbar theme-adaptive elements */
+    .navbar .logo img,
+    .navbar .nav-link,
+    .navbar .nav-link svg path,
+    .navbar .nav-divider,
+    .navbar .nav-login,
+    .navbar .btn-ghost,
+    .navbar .mobile-menu-btn,
+    .navbar .mobile-menu-btn svg {
+      transition: color 300ms ease, background 300ms ease, border-color 300ms ease, filter 300ms ease, stroke 300ms ease;
+      will-change: color, background, filter;
+    }
+
+    .navbar.scrolled {
+      border-radius: 16px;
+    }
+
+    /* Default state (dark theme - over hero/dark sections) - TRANSPARENT */
+    .navbar[data-theme="dark"] {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid transparent;
+    }
+
+    /* Scrolled state - show glassmorphic wrapper */
+    .navbar[data-theme="dark"].scrolled {
+      background: rgba(1, 7, 14, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    }
+
+    .navbar[data-theme="dark"] .logo img {
+      filter: none !important;
+      transition: filter 300ms ease;
+    }
+
+    .navbar[data-theme="dark"] .nav-link {
+      color: var(--white);
+    }
+
+    .navbar[data-theme="dark"] .nav-link svg path {
+      stroke: white !important;
+    }
+
+    .navbar[data-theme="dark"] .nav-divider {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .navbar[data-theme="dark"] .nav-login {
+      color: var(--white);
+    }
+
+    .navbar[data-theme="dark"] .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="dark"] .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .navbar[data-theme="dark"] .mobile-menu-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="dark"] .mobile-menu-btn svg {
+      stroke: var(--white) !important;
+    }
+
+    /* Light theme - over light sections - TRANSPARENT by default */
+    .navbar[data-theme="light"] {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid transparent;
+    }
+
+    /* Scrolled state - show glassmorphic wrapper */
+    .navbar[data-theme="light"].scrolled {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(7, 12, 17, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    .navbar[data-theme="light"] .logo img {
+      filter: brightness(0) !important;
+      transition: filter 300ms ease;
+    }
+
+    .navbar[data-theme="light"] .nav-link {
+      color: var(--fg-dark);
+    }
+
+    .navbar[data-theme="light"] .nav-link svg path {
+      stroke: var(--fg-dark) !important;
+    }
+
+    .navbar[data-theme="light"] .nav-divider {
+      background: rgba(7, 12, 17, 0.15);
+    }
+
+    .navbar[data-theme="light"] .nav-login {
+      color: var(--fg-dark);
+    }
+
+    .navbar[data-theme="light"] .btn-ghost {
+      background: rgba(7, 12, 17, 0.05);
+      border-color: rgba(7, 12, 17, 0.1);
+      color: var(--fg-dark);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="light"] .btn-ghost:hover {
+      background: rgba(7, 12, 17, 0.15);
+      border-color: rgba(7, 12, 17, 0.5);
+    }
+
+    .navbar[data-theme="light"] .mobile-menu-btn {
+      background: rgba(7, 12, 17, 0.05);
+      border-color: rgba(7, 12, 17, 0.1);
+      border-radius: 0;
+    }
+
+    .navbar[data-theme="light"] .mobile-menu-btn svg {
+      stroke: var(--fg-dark) !important;
+    }
+
+    /* Fallback for no data-theme (defaults to dark) - TRANSPARENT */
+    .navbar:not([data-theme]) {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid transparent;
+    }
+
+    .navbar:not([data-theme]).scrolled,
+    .navbar.scrolled:not([data-theme]) {
+      background: rgba(1, 7, 14, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+    }
+
+    /* ===================== MOBILE MENU SYSTEM ===================== */
+    .mobile-menu-overlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 72px;
+      bottom: 0;
+      background: rgba(1, 7, 14, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 300ms ease, visibility 300ms ease;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      max-height: 100vh;
+      background: var(--bg-dark);
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    .mobile-menu.is-active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-menu-header .logo {
+      width: 140px;
+      height: 34px;
+    }
+
+    .mobile-menu-header .logo img {
+      width: 100%;
+      height: 100%;
+      filter: none !important; /* Always white in mobile menu */
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .mobile-menu-close {
+      width: 44px;
+      height: 44px;
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
+      border-radius: 0;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
-      transition: background 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+      transition: background 150ms ease, border-color 150ms ease;
     }
 
-    .navbar.scrolled {
-      background: rgba(9, 16, 21, 0.9);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    .mobile-menu-close:hover {
+      background: var(--white-muted-10);
+      border-color: var(--white-muted-60);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
+    }
+
+    .mobile-menu-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .mobile-menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 0;
+      transition: background 150ms ease;
+    }
+
+    .mobile-menu-link:hover {
+      background: var(--white-muted-05);
+    }
+
+    .mobile-menu-link svg {
+      width: 14px;
+      height: 14px;
+      stroke: rgba(255, 255, 255, 0.4);
+      transform: rotate(-90deg);
+    }
+
+    .mobile-menu-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+    }
+
+    .mobile-menu-cta {
+      flex: 1;
+      padding: 14px 20px;
+      background: var(--white);
+      color: var(--fg-dark);
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mobile-menu-cta:hover {
+      background: #2F6FEB;
+      color: white;
+    }
+
+    .mobile-menu-login {
+      flex: 1;
+      padding: 14px 20px;
+      background: transparent;
+      border: 1px solid var(--white-muted-10);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .mobile-menu-login:hover {
+      background: var(--white-muted-05);
+      border-color: var(--white-muted-60);
+    }
+
+    /* Hamburger to X animation */
+    .mobile-menu-btn.is-active svg line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+      transform-origin: center;
+    }
+
+    .mobile-menu-btn.is-active svg line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-btn.is-active svg line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+      transform-origin: center;
+    }
+
+    .mobile-menu-btn svg line {
+      transition: transform 200ms ease, opacity 200ms ease;
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+      overflow: hidden;
     }
 
     .navbar-container {
       width: 100%;
-      max-width: 1440px;
-      padding: 0 100px;
+      padding: 0 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    @media (min-width: 1440px) {
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 24px 60px;
+      }
+      .navbar {
+        max-width: 1360px;
+      }
+      .navbar-container {
+        padding: 0 32px;
+      }
+    }
+
+    /* Large screens - 1600px+ */
+    @media (min-width: 1600px) {
+      .section-inner,
+      .client-logos-inner,
+      .key-advantage-inner,
+      .cta-inner,
+      .faq-inner,
+      .insights-inner,
+      .footer-inner {
+        max-width: 1400px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 24px 80px;
+      }
+      .navbar {
+        max-width: 1400px;
+      }
+      .navbar-container {
+        padding: 0 40px;
+      }
+
+      .bento-card-sm {
+        flex: 1;
+        min-width: 400px;
+      }
+
+      .bento-card-lg,
+      .bento-card-wide {
+        flex: 2;
+        min-width: 600px;
+      }
+
+      .bento-row {
+        gap: 24px;
+      }
+
+      .key-card-blue {
+        flex: 1;
+        min-width: 450px;
+      }
+
+      .key-card-white {
+        flex: 2;
+        min-width: 700px;
+      }
+
+      .key-advantage-cards {
+        gap: 24px;
+      }
+
+      .key-advantage-wrapper {
+        padding: 100px 60px;
+      }
+
+      .how-card {
+        width: 460px !important;
+      }
+
+      .testimonial-card {
+        flex: 1;
+        min-width: 600px;
+      }
+
+      .how-card {
+        flex: 1;
+        min-width: 350px;
+      }
+
+      .insight-card {
+        width: 450px;
+      }
+
+      .insight-image {
+        width: 450px !important;
+        height: 300px !important;
+      }
+
+      .insight-content {
+        width: 450px !important;
+      }
+
+      .insights-grid {
+        animation-duration: 55s;
+      }
+
+      .testimonial-cards {
+        justify-content: center;
+      }
+
+      .how-cards {
+        justify-content: center;
+      }
+
+      .faq-question {
+        width: 1000px !important;
+      }
+
+      .faq-answer {
+        width: 1000px !important;
+      }
+    }
+
+    /* Extra large screens - 1920px+ */
+    @media (min-width: 1920px) {
+      .section-inner,
+      .client-logos-inner,
+      .key-advantage-inner,
+      .cta-inner,
+      .faq-inner,
+      .insights-inner,
+      .footer-inner {
+        max-width: 1680px;
+        padding: 0 80px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 28px 100px;
+      }
+      .navbar {
+        max-width: 1680px;
+      }
+      .navbar-container {
+        padding: 0 48px;
+      }
+
+      .hero-bg {
+        min-width: 1920px;
+      }
+
+      .hero-content {
+        width: 1000px;
+      }
+
+      .hero-headline {
+        font-size: 120px;
+      }
+
+      .hero-mockup {
+        width: 1400px;
+        height: 938px;
+      }
+
+      .bento-card-sm {
+        flex: 1;
+        min-width: 500px;
+        height: 600px;
+      }
+
+      .bento-card-lg,
+      .bento-card-wide {
+        flex: 2;
+        min-width: 800px;
+        height: 600px;
+      }
+
+      .bento-callout {
+        height: 550px;
+      }
+
+      .key-card-blue {
+        flex: 1;
+        min-width: 500px;
+        height: 600px;
+      }
+
+      .key-card-white {
+        flex: 2;
+        min-width: 800px;
+        height: 600px;
+      }
+
+      .key-advantage-cards {
+        gap: 30px;
+      }
+
+      .key-advantage-wrapper {
+        padding: 100px 80px;
+      }
+
+      .section-title {
+        font-size: 72px;
+      }
+
+      .how-card {
+        flex: 1;
+        min-width: 450px;
+        height: 600px !important;
+      }
+
+      .testimonial-card {
+        flex: 1;
+        min-width: 700px;
+        height: 550px !important;
+      }
+
+      .cta-section {
+        padding: 120px 0 !important;
+      }
+
+      .cta-title {
+        font-size: 80px !important;
+        max-width: 900px !important;
+      }
+
+      .cta-banner {
+        padding: 80px !important;
+      }
+
+      .marquee-track {
+        gap: 120px;
+        animation-duration: 50s;
+      }
+
+      .client-logos-inner {
+        gap: 120px;
+      }
+
+      .client-logo {
+        width: 180px !important;
+        height: 36px !important;
+      }
+
+      .insight-card {
+        width: 500px;
+      }
+
+      .insight-image {
+        width: 500px !important;
+        height: 320px !important;
+      }
+
+      .insight-content {
+        width: 500px !important;
+      }
+
+      .insights-grid {
+        gap: 30px;
+        animation-duration: 60s;
+      }
+
+      .testimonial-cards {
+        gap: 40px;
+      }
+
+      .how-cards {
+        gap: 30px;
+      }
+
+      .bento-row {
+        gap: 30px;
+      }
+
+      .bento-grid {
+        gap: 30px;
+      }
+
+      .faq-question {
+        width: 1200px !important;
+      }
+
+      .faq-answer {
+        width: 1200px !important;
+      }
+
+      .footer {
+        padding: 100px 0 !important;
+        height: 700px;
+      }
+
+      .footer-bg,
+      .footer-bg-lines {
+        width: 1600px;
+      }
     }
 
     .navbar-left {
@@ -150,12 +800,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: filter 300ms ease;
     }
 
     .nav-divider {
       width: 1px;
       height: 20px;
       background: rgba(255, 255, 255, 0.2);
+      transition: background 300ms ease;
     }
 
     .nav-links {
@@ -175,11 +827,20 @@
       letter-spacing: -0.14px;
       text-decoration: none;
       white-space: nowrap;
+      transition: color 300ms ease, opacity 200ms ease;
+    }
+
+    .nav-link:hover {
+      opacity: 0.7;
     }
 
     .nav-link svg {
       width: 7px;
       height: 3.3px;
+    }
+
+    .nav-link svg path {
+      transition: stroke 300ms ease;
     }
 
     .navbar-right {
@@ -194,6 +855,11 @@
       font-weight: 500;
       letter-spacing: -0.14px;
       text-decoration: none;
+      transition: color 300ms ease, opacity 200ms ease;
+    }
+
+    .nav-login:hover {
+      opacity: 0.7;
     }
 
     .nav-buttons {
@@ -212,6 +878,7 @@
       font-weight: 500;
       letter-spacing: -0.14px;
       cursor: pointer;
+      transition: background 300ms ease, border-color 300ms ease, color 300ms ease;
     }
 
     .btn-lang {
@@ -224,7 +891,6 @@
       height: 100%;
     }
 
-    /* Hero Content */
     .hero-content {
       position: absolute;
       left: 50%;
@@ -309,6 +975,12 @@
       letter-spacing: -0.16px;
       border: none;
       cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #2F6FEB;
+      color: var(--white);
     }
 
     .btn-secondary {
@@ -321,9 +993,14 @@
       font-weight: 600;
       letter-spacing: -0.16px;
       cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
 
-    /* Hero Mockup */
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
     .hero-mockup {
       position: absolute;
       left: 50%;
@@ -343,71 +1020,120 @@
       position: absolute;
       left: -4.01%;
       top: -5.87%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
 
-    /* Hero Tabs */
-    .hero-tabs {
+    .hero-mockup img.active {
+      opacity: 1;
+    }
+
+    .hero-tabs-container {
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0;
+      right: 0;
       top: 588px;
+      overflow: hidden;
+      mask: linear-gradient(90deg, transparent 0%, transparent 15%, black 48%, black 52%, transparent 85%, transparent 100%);
+      -webkit-mask: linear-gradient(90deg, transparent 0%, transparent 15%, black 48%, black 52%, transparent 85%, transparent 100%);
+    }
+
+    .hero-tabs {
       display: flex;
       align-items: center;
       gap: 18px;
+      width: max-content;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .hero-tab {
+      position: relative;
+      z-index: 2;
       backdrop-filter: blur(3px);
       background: var(--white-muted-10);
+      border: 1px solid transparent;
       padding: 14px 35px;
       color: var(--white);
       font-size: 16px;
       font-weight: 600;
       letter-spacing: -0.16px;
       white-space: nowrap;
+      opacity: 0.6;
+      transition: border-color 0.4s ease, opacity 0.4s ease;
+      cursor: pointer;
+    }
+
+    .hero-tab:hover {
+      opacity: 0.8;
     }
 
     .hero-tab.active {
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-color: rgba(255, 255, 255, 0.5);
+      opacity: 1;
     }
 
-    .hero-gradient-left, .hero-gradient-right {
-      position: absolute;
-      top: 588px;
-      width: 382px;
-      height: 49px;
-      background: linear-gradient(to right, rgba(9, 17, 22, 0), #091116 80%);
-    }
-
-    .hero-gradient-left {
-      left: calc(50% - 468px);
-      transform: scaleX(-1);
-    }
-
-    .hero-gradient-right {
-      right: calc(50% - 468px);
-    }
-
-    /* Bottom gradient overlay */
     .hero-bottom-gradient {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 100px;
-      background: linear-gradient(to top, var(--bg-light), transparent);
+      background: linear-gradient(180deg, rgba(5, 11, 14, 0.00) 0%, rgba(5, 11, 14, 0.30) 100%);
     }
 
-    /* Client Logos */
     .client-logos {
       background: var(--bg-light);
-      padding: 60px 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 80px;
+      padding: 60px 0;
       position: relative;
       overflow: hidden;
+      width: 100%;
+    }
+
+    .client-logos::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        #FAFAF8 0%,
+        #FAFAF8 10%,
+        rgba(250, 250, 248, 0.00) 30%,
+        rgba(250, 250, 248, 0.00) 70%,
+        #FAFAF8 90%,
+        #FAFAF8 100%
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      width: max-content;
+      animation: marquee 40s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .client-logos-inner {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      flex-shrink: 0;
     }
 
     .client-logo {
@@ -420,27 +1146,43 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      filter: grayscale(100%);
+      opacity: 0.6;
+      transition: filter 300ms ease, opacity 300ms ease;
     }
 
-    .client-logos-gradient {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 152px;
-      background: linear-gradient(to right, #fafaf8 18.269%, rgba(250, 250, 248, 0.5) 50%, #fafaf8 86.058%);
-      pointer-events: none;
+    .client-logo:hover img {
+      filter: grayscale(0%);
+      opacity: 1;
     }
 
-    /* Section base styles */
+    /* Respect user's motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track {
+        animation: none;
+      }
+    }
+
     .section {
       background: var(--bg-light);
-      padding: 80px 120px;
+      padding: 80px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 80px;
       overflow: hidden;
+      width: 100%;
+    }
+
+    .section-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
     }
 
     .section-header {
@@ -478,7 +1220,6 @@
       max-width: 660px;
     }
 
-    /* Bento Grid */
     .bento-grid {
       display: flex;
       flex-direction: column;
@@ -499,21 +1240,88 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      padding: 40px;
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .bento-card:hover {
+      transform: scale(1.01);
+      border-color: rgba(47, 111, 235, 0.6);
+      box-shadow: 0 8px 24px rgba(47, 111, 235, 0.12);
+    }
+
+    a.bento-card {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+    }
+
+    /* Allow iframe hover interactions - only block non-interactive elements */
+    /* Images, objects, and SVGs block card clicks */
+    .bento-card img,
+    .bento-card object,
+    .bento-card svg {
+      pointer-events: none;
+    }
+
+    /* Iframes need pointer-events for internal hover animations */
+    .bento-card iframe,
+    .bento-card .component-frame {
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 5;
+      cursor: pointer;
+    }
+
+    /* Ensure iframe fills the visual wrapper and is interactable */
+    .bento-card-visual iframe,
+    .bento-card-visual .component-frame {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      border: none;
+      background: transparent;
+    }
+
+    /* Visual wrapper for bento cards */
+    .bento-card-visual {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: visible;
+      container-type: inline-size;
+      container-name: card-visual;
+    }
+
+    /* Visual wrapper height by card type */
+    .bento-card-sm .bento-card-visual {
+      height: 320px;
+      flex: 0 0 auto;
+    }
+
+    .bento-card-lg .bento-card-visual {
+      height: 360px;
+      flex: 0 0 auto;
     }
 
     .bento-card-sm {
       width: 450px;
       height: 550px;
-      gap: 60px;
+      gap: 0;
       align-items: center;
     }
 
     .bento-card-lg {
       width: 730px;
       height: 550px;
-      gap: 36px;
+      gap: 0;
       align-items: center;
     }
 
@@ -521,6 +1329,7 @@
       width: 730px;
       height: 550px;
       justify-content: space-between;
+      overflow: hidden;
     }
 
     .bento-card-icon {
@@ -559,11 +1368,93 @@
       gap: 12px;
       text-align: center;
       width: 100%;
+      padding: 40px;
+      flex-shrink: 0;
     }
 
     .bento-card-wide .bento-card-content {
       text-align: left;
       width: 250px;
+    }
+
+    .bento-card-crm {
+      width: 450px;
+      height: 550px;
+      padding: 60px 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .bento-card-crm:hover {
+      transform: scale(1.01);
+      border-color: rgba(47, 111, 235, 0.9) !important;
+      box-shadow: 0 8px 24px rgba(47, 111, 235, 0.15);
+    }
+
+    .bento-callout {
+      width: 100%;
+      height: 500px;
+      background: var(--bg-footer);
+      padding: 60px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bento-callout-image {
+      position: absolute;
+      left: 0;
+      top: 267px;
+      width: 836px;
+      height: 233px;
+      object-fit: cover;
+    }
+
+    .bento-callout-bg {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 1200px;
+      height: 500px;
+      backdrop-filter: blur(30px);
+      background: var(--white);
+      border: 1px solid var(--white);
+      overflow: hidden;
+    }
+
+    .bento-callout-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .bento-callout-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -1.28px;
+      line-height: 1.2;
+      max-width: 750px;
+      text-align: left;
+      flex: 1;
+    }
+
+    .bento-callout-buttons {
+      display: flex;
+      gap: 20px;
+      flex-shrink: 0;
     }
 
     .bento-card-title {
@@ -582,75 +1473,83 @@
       line-height: 1.4;
     }
 
-    /* Key Advantage / How it Works - Dark Section */
-    .key-advantage {
-      background: var(--bg-dark);
-      padding: 80px 120px;
+    .key-advantage-section {
+      background: var(--bg-light);
+      padding: 80px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 80px;
+      width: 100%;
     }
 
-    .key-advantage .section-header {
-      color: var(--white);
+    .key-advantage-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
     }
 
-    .key-advantage .section-label {
-      color: var(--white-muted);
+    .key-advantage-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--fg-muted-10);
+      padding: 80px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+      width: 100%;
     }
 
-    .key-advantage .section-title {
-      color: var(--white);
+    .key-advantage-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .key-advantage-header .section-header {
+      gap: 4px;
     }
 
     .key-advantage-cards {
       display: flex;
       gap: 20px;
+      justify-content: center;
+      width: 100%;
     }
 
-    .key-card {
-      width: 380px;
-      height: 450px;
-      background: var(--white);
+    .key-card-blue {
+      width: 500px;
+      height: 550px;
+      background: linear-gradient(to bottom, rgba(0, 118, 255, 0.2), rgba(255, 255, 255, 0.02));
       border: 1px solid var(--fg-muted-10);
-      padding: 24px 32px;
+      padding: 40px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      gap: 32px;
+      gap: 24px;
       position: relative;
       overflow: hidden;
     }
 
-    .key-card-number {
-      position: absolute;
-      top: 7px;
-      left: 7px;
-      font-size: 32px;
-      font-weight: 300;
-      color: var(--fg-muted-10);
-      letter-spacing: -0.32px;
-      line-height: 1.2;
-    }
-
-    .key-card-visual {
-      flex: 1;
+    .key-card-white {
+      width: 850px;
+      height: 550px;
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+      padding: 40px;
       display: flex;
+      flex-direction: column;
+      gap: 10px;
       align-items: center;
-      justify-content: center;
-    }
-
-    .key-card-visual img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      position: relative;
+      overflow: hidden;
     }
 
     .key-card-content {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .key-card-title {
@@ -669,7 +1568,157 @@
       line-height: 1.4;
     }
 
-    /* Testimonials */
+    .key-card-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--fg-dark);
+      width: fit-content;
+    }
+
+    .key-card-link span {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.18px;
+      line-height: 1.4;
+    }
+
+    .key-card-link img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .key-card-mockup {
+      position: absolute;
+      left: 26px;
+      top: 236px;
+      width: 606px;
+      height: 406px;
+      border: 6px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .key-card-mockup img {
+      width: 108.24%;
+      height: 111.99%;
+      object-fit: cover;
+      position: absolute;
+      left: -4.01%;
+      top: -5.87%;
+    }
+
+    .key-card-white .key-card-content {
+      text-align: center;
+      width: 100%;
+    }
+
+    .key-card-white .key-card-desc {
+      width: 450px;
+      margin: 0 auto;
+    }
+
+    .key-card-visual {
+      width: 653px;
+      height: 379px;
+    }
+
+    .key-card-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* How it works cards */
+    .how-cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .how-card {
+      width: 380px;
+      height: 450px;
+      background: var(--white);
+      border: 1px solid var(--fg-muted-10);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      gap: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .how-card-number {
+      position: absolute;
+      top: 7px;
+      left: 7px;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--fg-muted-10);
+      letter-spacing: -0.32px;
+      line-height: 1.2;
+      z-index: 1;
+    }
+
+    .how-card-visual {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: visible;
+      position: relative;
+    }
+
+    .how-card-visual img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .how-card-visual .component-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      border: none;
+      display: block;
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 5;
+      cursor: pointer;
+    }
+
+    .how-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 24px 32px;
+      flex-shrink: 0;
+    }
+
+    .how-card-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--fg-dark);
+      letter-spacing: -0.24px;
+      line-height: 1.2;
+    }
+
+    .how-card-desc {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--fg-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+    }
+
     .testimonials-grid {
       display: flex;
       flex-direction: column;
@@ -783,10 +1832,17 @@
       line-height: 1.4;
     }
 
-    /* CTA Section */
     .cta-section {
       background: var(--bg-light);
-      padding: 80px 120px;
+      padding: 80px 0;
+      width: 100%;
+    }
+
+    .cta-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
     }
 
     .cta-banner {
@@ -861,10 +1917,21 @@
       flex-shrink: 0;
     }
 
-    /* FAQ Section */
     .faq-section {
       background: var(--bg-light);
-      padding: 80px 120px 160px;
+      padding: 80px 0 160px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 80px;
+      width: 100%;
+    }
+
+    .faq-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -920,22 +1987,50 @@
       letter-spacing: -0.16px;
       line-height: 1.4;
       display: none;
+      width: 800px;
     }
 
     .faq-item.open .faq-answer {
       display: block;
     }
 
-    /* Insights Section */
     .insights-section {
       background: var(--bg-footer);
-      padding: 80px 120px 120px;
+      padding: 80px 0 120px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 80px;
+      width: 100%;
+      overflow: hidden;
     }
 
+    .insights-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .insights-header-wrapper {
+      padding: 0 120px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .insights-marquee-container {
+      width: 100%;
+      overflow: visible;
+      position: relative;
+      padding: 0 60px;
+    }
+
+    
     .insights-header {
       display: flex;
       flex-direction: column;
@@ -977,13 +2072,42 @@
 
     .insights-grid {
       display: flex;
-      gap: 20px;
+      gap: 24px;
+      width: max-content;
+      animation: insights-marquee 50s linear infinite;
+    }
+
+    .insights-marquee-container:hover .insights-grid {
+      animation-play-state: paused;
+    }
+
+    @keyframes insights-marquee {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .insights-grid {
+        animation: none;
+      }
     }
 
     .insight-card {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      flex-shrink: 0;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .insight-card:hover .insight-image img {
+      transform: translate(-50%, -50%) scale(1.05);
     }
 
     .insight-image {
@@ -993,6 +2117,7 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       overflow: hidden;
       position: relative;
+      transition: border-color 0.3s ease;
     }
 
     .insight-image img {
@@ -1003,6 +2128,7 @@
       min-width: 108%;
       min-height: 110%;
       object-fit: cover;
+      transition: transform 0.4s ease;
     }
 
     .insight-content {
@@ -1037,10 +2163,9 @@
       font-size: 16px;
     }
 
-    /* Footer */
     .footer {
       background: var(--bg-footer);
-      padding: 80px 120px;
+      padding: 80px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1049,17 +2174,34 @@
       justify-content: flex-end;
       position: relative;
       overflow: hidden;
+      width: 100%;
+    }
+
+    .footer-inner {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 150px;
     }
 
     .footer-bg {
       position: absolute;
-      left: 90px;
+      left: 50%;
+      transform: translateX(-50%) scaleY(-1);
       top: 70px;
       width: 1260px;
       height: 600px;
-      transform: scaleY(-1);
       pointer-events: none;
       opacity: 0.3;
+    }
+
+    .footer-bg-lines {
+      top: -617px;
+      height: 1287px;
     }
 
     .footer-content {
@@ -1122,6 +2264,7 @@
       color: var(--white);
       letter-spacing: -0.14px;
       outline: none;
+      font-family: inherit;
     }
 
     .footer-newsletter-input::placeholder {
@@ -1176,6 +2319,11 @@
       letter-spacing: -0.16px;
       line-height: 1.4;
       text-decoration: none;
+      transition: color 200ms ease;
+    }
+
+    .footer-link:hover {
+      color: var(--white);
     }
 
     .footer-bottom {
@@ -1193,449 +2341,1730 @@
       line-height: 1.4;
     }
 
-    /* Mobile menu button */
+    .footer-bottom-link {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white-muted-60);
+      letter-spacing: -0.16px;
+      line-height: 1.4;
+      text-decoration: none;
+      transition: color 200ms ease;
+    }
+
+    .footer-bottom-link:hover {
+      color: var(--white);
+    }
+
+    /* ========================================
+       RESPONSIVE STYLES
+       ======================================== */
+
+    /* Ensure full-width backgrounds */
+    html, body {
+      width: 100%;
+      max-width: none;
+    }
+
+    /* Page wrapper - full width, no constraints */
+    .page {
+      width: 100%;
+      max-width: none;
+    }
+
+    /* Mobile menu button (hidden by default) */
     .mobile-menu-btn {
       display: none;
-      background: none;
-      border: none;
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
+      background: var(--white-muted-05);
+      border: 1px solid var(--white-muted-10);
       cursor: pointer;
-      padding: 4px;
+      align-items: center;
+      justify-content: center;
     }
 
-    .mobile-menu-btn span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: var(--white);
-      margin: 6px 0;
-      border-radius: 1px;
+    .mobile-menu-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--white);
     }
 
-    /* ======================= RESPONSIVE ======================= */
-
-    /* Large screens 1600px+ */
-    @media (min-width: 1600px) {
-      .section-inner,
-      .client-logos-inner,
-      .key-advantage-inner,
-      .cta-inner,
-      .faq-inner,
-      .insights-inner,
-      .footer-inner {
-        max-width: 1400px;
-      }
-
-      .faq-question {
-        width: 1000px;
-      }
-    }
-
-    /* Extra large screens 1920px+ */
-    @media (min-width: 1920px) {
-      .section-inner,
-      .client-logos-inner,
-      .key-advantage-inner,
-      .cta-inner,
-      .faq-inner,
-      .insights-inner,
-      .footer-inner {
-        max-width: 1680px;
-      }
-
-      .hero-headline {
-        font-size: 120px;
-      }
-
-      .hero-mockup {
-        width: 1400px;
-      }
-
-      .client-logos-inner {
-        gap: 120px;
-      }
-    }
-
-    /* Tablet landscape: 1024-1279px */
+    /* ===================== TABLET LANDSCAPE (1024px - 1279px) ===================== */
     @media (max-width: 1279px) {
       .section {
-        padding: 60px 60px;
-      }
-
-      .navbar-container {
-        padding: 0 60px;
-      }
-
-      .hero-mockup {
-        width: 1000px;
-      }
-
-      .bento-row {
-        gap: 16px;
-      }
-
-      .bento-card-small,
-      .bento-card-wide {
-        width: auto;
-        flex: 1;
-        min-width: 280px;
-      }
-
-      .key-cards {
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      .key-card-blue,
-      .key-card-white {
-        width: 100%;
-      }
-
-      .how-cards {
-        gap: 16px;
-      }
-
-      .how-card {
-        width: auto;
-        flex: 1;
-        min-width: 200px;
-      }
-    }
-
-    /* Tablet portrait: 768-1023px */
-    @media (max-width: 1023px) {
-      .nav-links,
-      .nav-divider,
-      .nav-login {
-        display: none;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .navbar-container {
-        padding: 0 40px;
-      }
-
-      .hero {
-        height: auto;
-        min-height: 800px;
-        padding-bottom: 80px;
-      }
-
-      .hero-content {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        padding: 100px 40px 40px;
-        width: 100%;
-      }
-
-      .hero-headline {
-        font-size: 64px;
-      }
-
-      .hero-subtitle {
-        width: 100%;
-      }
-
-      .hero-tabs {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0 40px;
-        margin-top: 40px;
-      }
-
-      .hero-mockup {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: calc(100% - 80px);
-        height: auto;
-        aspect-ratio: 1200 / 804;
-        margin: 40px auto 0;
-      }
-
-      .section {
-        padding: 60px 40px;
-      }
-
-      .section-title {
-        font-size: 48px;
-      }
-
-      .bento-row {
-        flex-direction: column;
-      }
-
-      .bento-card-small,
-      .bento-card-wide {
-        width: 100%;
-      }
-
-      .bento-card-wide .card-visual {
-        overflow: hidden;
-      }
-
-      .bento-card-wide .card-visual img {
-        position: relative !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-      }
-
-      .bento-callout-content {
-        flex-direction: column;
-        gap: 24px;
-        text-align: center;
-      }
-
-      .callout-title {
-        font-size: 32px;
-      }
-
-      .testimonial-cards {
-        flex-direction: column;
-        gap: 40px;
-      }
-
-      .testimonial-card-image,
-      .testimonial-card-content {
-        width: 100%;
-      }
-
-      .cta-banner-content {
-        flex-direction: column;
-        gap: 32px;
-        text-align: center;
-        align-items: center;
-      }
-
-      .cta-title {
-        font-size: 48px;
-        text-align: center;
-      }
-
-      .insights-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .footer-content {
-        flex-direction: column;
+        padding: 60px 0;
         gap: 60px;
       }
 
-      .footer-left,
-      .footer-links {
-        width: 100%;
+      .section-inner {
+        padding: 0 60px;
+        gap: 60px;
       }
 
-      .footer-bottom {
-        flex-wrap: wrap;
-        gap: 20px;
+      .client-logos {
+        padding: 40px 0;
       }
-    }
 
-    /* Mobile: <768px */
-    @media (max-width: 767px) {
-      .navbar {
-        height: 64px;
+      .marquee-track {
+        gap: 60px;
+      }
+
+      .client-logos-inner {
+        gap: 60px;
+      }
+
+      .navbar-wrapper {
+        padding: 0 24px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 0 24px;
       }
 
       .navbar-container {
         padding: 0 24px;
       }
 
-      .btn-ghost {
+      .key-advantage-inner {
+        padding: 0 60px;
+      }
+
+      .bento-card-sm {
+        width: 380px;
+        height: 480px;
+      }
+
+      .bento-card-lg,
+      .bento-card-wide {
+        width: 620px;
+        height: 480px;
+      }
+
+      .key-advantage-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .key-card-blue,
+      .key-card-white {
+        width: 100%;
+        max-width: 900px;
+      }
+
+      .key-card-white .key-card-desc {
+        width: 100%;
+        max-width: 450px;
+      }
+
+      .how-card {
+        width: 320px;
+        height: 400px;
+      }
+
+      .cta-section {
+        padding: 60px 0;
+      }
+
+      .cta-inner {
+        padding: 0 60px;
+      }
+
+      .faq-section {
+        padding: 60px 0 100px;
+      }
+
+      .faq-inner {
+        padding: 0 60px;
+      }
+
+      .insights-section {
+        padding: 60px 0 80px;
+      }
+
+      .insights-inner {
+        padding: 0;
+      }
+
+      .insights-header-wrapper {
+        padding: 0 60px;
+      }
+
+      .insights-grid {
+        gap: 24px;
+        animation-duration: 45s;
+      }
+
+      .insight-card {
+        width: 360px;
+      }
+
+      .insight-image {
+        width: 360px;
+        height: 240px;
+      }
+
+      .insight-content {
+        width: 360px;
+      }
+
+      .footer {
+        padding: 60px 0;
+        height: auto;
+        min-height: 500px;
+      }
+
+      .footer-inner {
+        padding: 0 60px;
+        gap: 100px;
+      }
+
+      .footer-links {
+        gap: 60px;
+      }
+    }
+
+    /* ===================== TABLET PORTRAIT (768px - 1023px) ===================== */
+    @media (max-width: 1023px) {
+      .section {
+        padding: 60px 0;
+        gap: 50px;
+      }
+
+      .section-inner {
+        padding: 0 32px;
+        gap: 50px;
+      }
+
+      .section-title {
+        font-size: 48px;
+        letter-spacing: -0.96px;
+      }
+
+      /* === NAVBAR FLOATING WRAPPER - TABLET === */
+      .navbar-wrapper {
+        padding: 0 16px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 0 16px;
+      }
+
+      .navbar {
+        height: 52px;
+      }
+
+      .navbar.scrolled {
+        border-radius: 14px;
+      }
+
+      .navbar-container {
+        padding: 0 16px;
+      }
+
+      /* === HERO - Same as mobile === */
+      .hero {
+        height: 880px;
+        min-height: 880px;
+        padding-top: 72px;
+        padding-bottom: 0;
+      }
+
+      .hero-bg {
+        min-width: unset;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-divider {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .nav-buttons,
+      .btn-ghost,
+      .btn-lang {
         display: none;
       }
 
       .hero-content {
-        padding: 80px 24px 40px;
+        top: 140px;
+        width: calc(100% - 64px) !important;
+        max-width: 600px !important;
+        gap: 45px;
+        padding: 0;
+      }
+
+      .hero-text {
+        gap: 10px;
+        width: 100%;
+      }
+
+      .hero-headline {
+        font-size: 56px;
+        letter-spacing: -1.12px;
+        line-height: 1.1;
+      }
+
+      .hero-subtitle {
+        width: 100%;
+        max-width: 100%;
+        font-size: 14px;
+        letter-spacing: -0.14px;
+      }
+
+      .hero-buttons {
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      .hero-tabs-container {
+        display: none;
+      }
+
+      /* === HERO MOCKUP - Positioned to the right, partially visible === */
+      .hero-mockup {
+        position: absolute;
+        top: 544px;
+        left: auto;
+        right: -30%;
+        transform: none;
+        width: 60%;
+        min-width: 600px;
+        height: auto;
+        aspect-ratio: 1200 / 804;
+        border-width: 6px;
+        border-radius: 12px;
+        margin: 0;
+      }
+
+      .hero-bottom-gradient {
+        width: 100%;
+      }
+
+      .client-logos {
+        padding: 40px 0;
+      }
+
+      .marquee-track {
+        gap: 50px;
+        animation-duration: 30s;
+      }
+
+      .client-logos-inner {
+        gap: 50px;
+      }
+
+      .client-logo {
+        width: 120px;
+        height: 24px;
+      }
+
+      .bento-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 16px;
+      }
+
+      .bento-row {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .bento-card-sm,
+      .bento-card-lg,
+      .bento-card-wide {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto;
+        min-height: 400px;
+      }
+
+      /* Bento card visual wrapper - tablet */
+      .bento-card-sm .bento-card-visual,
+      .bento-card-lg .bento-card-visual {
+        height: auto;
+        min-height: 280px;
+        flex: 0 0 auto;
+        aspect-ratio: 4/3;
+      }
+
+      .component-frame {
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+      }
+
+      .bento-callout {
+        height: auto;
+        min-height: 400px;
+        padding: 40px 32px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .bento-callout-image {
+        width: 100%;
+        height: 200px;
+        top: auto;
+        bottom: 0;
+        left: 0;
+      }
+
+      .bento-callout-title {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+        text-align: center;
+        max-width: 100%;
+        width: 100%;
+        flex: none;
+      }
+
+      .bento-callout-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .bento-callout-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .bento-callout-buttons .btn-primary,
+      .bento-callout-buttons .btn-secondary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .key-advantage-section {
+        padding: 60px 0;
+      }
+
+      .key-advantage-inner {
+        padding: 0 32px;
+      }
+
+      .key-advantage-wrapper {
+        padding: 60px 24px;
+        gap: 40px;
+      }
+
+      .key-card-blue {
+        height: auto;
+        min-height: 500px;
+      }
+
+      .key-card-mockup {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 16/10;
+        margin: 20px auto 0;
+      }
+
+      .key-card-white {
+        height: auto;
+        min-height: 400px;
+      }
+
+      .key-card-visual {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .key-advantage-cards {
+        gap: 20px;
+      }
+
+      .key-card-blue,
+      .key-card-white {
+        max-width: 100%;
+      }
+
+      .how-cards {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+      }
+
+      .how-card {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        min-height: 450px;
+      }
+
+      .testimonial-cards {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .testimonial-card {
+        width: 100%;
+        flex-direction: column;
+        height: auto;
+      }
+
+      .testimonial-image {
+        width: 100%;
+        height: 250px;
+      }
+
+      .testimonial-content {
+        padding: 24px;
+        gap: 24px;
+      }
+
+      .testimonial-quote {
+        font-size: 22px;
+      }
+
+      .testimonial-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
+      }
+
+      .testimonial-stat {
+        align-items: flex-start;
+      }
+
+      .testimonial-stat-value {
+        font-size: 48px;
+      }
+
+      .cta-section {
+        padding: 60px 0;
+      }
+
+      .cta-inner {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 32px !important;
+      }
+
+      .cta-banner {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto;
+        min-height: 320px;
+        padding: 40px 32px;
+      }
+
+      .cta-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+      }
+
+      .cta-title {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .cta-buttons {
+        width: 100%;
+      }
+
+      .cta-buttons .btn-primary,
+      .cta-buttons .btn-secondary {
+        flex: 1;
+        text-align: center;
+      }
+
+      .faq-section {
+        padding: 60px 0 80px;
+        gap: 50px;
+      }
+
+      .faq-inner {
+        padding: 0 32px;
+        gap: 50px;
+      }
+
+      .faq-question,
+      .faq-answer {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .insights-section {
+        padding: 60px 0;
+        gap: 50px;
+      }
+
+      .insights-inner {
+        padding: 0;
+        gap: 40px;
+      }
+
+      .insights-header-wrapper {
+        padding: 0 32px;
+      }
+
+      .insights-title {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .insights-grid {
+        gap: 20px;
+        animation-duration: 35s;
+      }
+
+      .insight-card {
+        width: 320px;
+        flex-shrink: 0;
+      }
+
+      .insight-image {
+        width: 320px;
+        height: 200px;
+      }
+
+      .insight-content {
+        width: 320px;
+      }
+
+      .footer {
+        padding: 60px 0;
+        height: auto;
+        gap: 60px;
+      }
+
+      .footer-inner {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 32px;
+        gap: 60px;
+      }
+
+      .footer-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer-links {
+        width: 100% !important;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .footer-left {
+        width: 100%;
+      }
+
+      .footer-desc,
+      .footer-newsletter {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .footer-bottom {
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: center;
+      }
+
+      /* Key Cards responsive tablet */
+      .key-cards {
+        width: 100% !important;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .key-card-blue,
+      .key-card-white {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+      }
+
+      /* Bento card content widths */
+      .bento-card-sm .bento-card-content,
+      .bento-card-lg .bento-card-content,
+      .bento-card-wide .bento-card-content {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Bento CRM card responsive */
+      .bento-card-crm {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 400px;
+      }
+
+      /* Bento callout content and buttons */
+      .bento-callout-content {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      .bento-callout-buttons {
+        width: 100% !important;
+        max-width: 300px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      /* Section subtitle */
+      .section-subtitle {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Key card content width */
+      .key-card-content {
+        width: 100% !important;
+      }
+
+      .key-card-desc {
+        width: 100% !important;
+      }
+    }
+
+    /* ===================== MOBILE (< 768px) - Per Figma node 437-133 ===================== */
+    @media (max-width: 767px) {
+      /* === SECTION DEFAULTS === */
+      .section {
+        padding: 40px 0;
+        gap: 40px;
+      }
+
+      .section-inner {
+        padding: 0 16px;
+        gap: 40px;
+      }
+
+      .section-header {
+        gap: 4px;
+      }
+
+      .section-label {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+      }
+
+      .section-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+        line-height: 1.1;
+      }
+
+      .section-subtitle {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+      }
+
+      /* === HERO === */
+      .hero {
+        height: 880px;
+        min-height: 880px;
+        padding-top: 64px;
+      }
+
+      /* === NAVBAR FLOATING WRAPPER - MOBILE === */
+      .navbar-wrapper {
+        padding: 0 16px;
+        top: 12px;
+      }
+
+      .navbar-wrapper:has(.navbar.scrolled) {
+        padding: 0 16px;
+      }
+
+      .navbar {
+        height: 48px;
+      }
+
+      .navbar.scrolled {
+        border-radius: 12px;
+      }
+
+      .navbar-container {
+        padding: 0 12px;
+        width: 100%;
+      }
+
+      .logo {
+        width: 118px;
+        height: 28px;
+      }
+
+      .navbar-left {
+        gap: 0;
+      }
+
+      .nav-divider,
+      .nav-links,
+      .nav-login {
+        display: none;
+      }
+
+      .navbar-right {
+        gap: 16px;
+      }
+
+      .nav-buttons {
+        display: none;
+      }
+
+      .btn-ghost {
+        display: none;
+      }
+
+      .btn-lang {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      /* === HERO CONTENT === */
+      .hero-content {
+        top: 140px;
+        width: 100% !important;
+        max-width: calc(100% - 32px) !important;
+        gap: 40px;
+        padding: 0 16px;
+      }
+
+      .hero-text {
+        gap: 10px;
+        width: 100%;
+      }
+
+      .hero-badge {
+        padding: 5px 12px;
+        gap: 10px;
+      }
+
+      .hero-badge-logo {
+        width: 37px;
+        height: 23px;
+      }
+
+      .hero-badge-text {
+        font-size: 10px;
+        letter-spacing: -0.2px;
+      }
+
+      .hero-headline {
+        font-size: 56px;
+        letter-spacing: -1.12px;
+        line-height: 1.1;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+        letter-spacing: -0.14px;
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .hero-buttons {
+        flex-direction: row;
+        gap: 20px;
+      }
+
+      .hero-buttons .btn-primary,
+      .hero-buttons .btn-secondary {
+        padding: 15px 30px;
+        font-size: 16px;
+      }
+
+      .hero-tabs-container {
+        display: none;
+      }
+
+      /* === HERO MOCKUP - Positioned to the right, partially visible === */
+      .hero-mockup {
+        position: absolute;
+        top: 544px;
+        left: auto;
+        right: -352px;
+        transform: none;
+        width: 704px;
+        height: 471px;
+        border-width: 4.7px;
+        border-radius: 9.4px;
+      }
+
+      .hero-bottom-gradient {
+        width: 100%;
+      }
+
+      /* === CLIENT LOGOS === */
+      .client-logos {
+        padding: 32px 0;
+        overflow: hidden;
+      }
+
+      .marquee-track {
+        gap: 40px;
+        animation-duration: 25s;
+      }
+
+      .client-logos-inner {
+        gap: 40px;
+      }
+
+      .client-logo {
+        width: 100px;
+        height: 20px;
+        flex-shrink: 0;
+      }
+
+      /* === BENTO CARDS === */
+      .bento-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 20px;
+      }
+
+      .bento-row {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .bento-card {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        padding: 16px;
+      }
+
+      .bento-card-sm,
+      .bento-card-lg,
+      .bento-card-wide {
+        min-height: auto;
+        gap: 24px;
+      }
+
+      .bento-card-content {
+        padding: 0;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .bento-card-visual {
+        width: 100%;
+        min-height: 240px;
+        height: auto;
+        aspect-ratio: 4/3;
+        position: relative;
+      }
+
+      .bento-card-sm .bento-card-visual,
+      .bento-card-lg .bento-card-visual {
+        height: auto;
+        flex: 0 0 auto;
+        aspect-ratio: 4/3;
+        min-height: 200px;
+      }
+
+      .bento-card-visual img {
+        position: relative;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+      }
+
+      /* Deal Management card image - make relative for mobile */
+      .bento-card-wide .bento-card-deal-image {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 0 auto !important;
+      }
+
+      /* Component iframe responsive */
+      .component-frame {
+        width: 100%;
+        height: 100%;
+        min-height: 200px;
+      }
+
+      .bento-card-icon {
+        width: 60px;
+        height: 60px;
+      }
+
+      .bento-card-icon img {
+        width: 50px;
+        height: 32px;
+      }
+
+      .bento-card-title {
+        font-size: 24px;
+        letter-spacing: -0.24px;
+        line-height: 1.2;
+      }
+
+      .bento-card-desc {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+        line-height: 1.4;
+      }
+
+      /* CRM Integration card - dashed border */
+      .bento-card-dashed {
+        border-width: 2px;
+        height: 550px;
+        padding: 16px;
+      }
+
+      .bento-card-dashed .bento-card-visual img {
+        width: 400px;
+        max-width: 120%;
+      }
+
+      /* === BENTO CALLOUT === */
+      .bento-callout {
+        min-height: auto;
+        padding: 16px;
+        gap: 10px;
+      }
+
+      .bento-callout-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+        width: 100%;
+        flex: none;
+      }
+
+      .bento-callout-subtitle {
+        font-size: 16px;
+      }
+
+      .bento-callout-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .bento-callout-buttons {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .bento-callout-buttons .btn-primary,
+      .bento-callout-buttons .btn-secondary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .bento-callout-gradient {
+        display: none;
+      }
+
+      /* === KEY ADVANTAGE SECTION === */
+      .key-advantage-section {
+        padding: 40px 0;
+      }
+
+      .key-advantage-inner {
+        padding: 0 16px;
+      }
+
+      .key-advantage-wrapper {
+        padding: 40px 16px;
+        gap: 40px;
+      }
+
+      .key-cards {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .key-card-blue,
+      .key-card-white {
+        width: 100% !important;
+        min-width: 100% !important;
+        flex: none !important;
+        padding: 16px;
+        min-height: auto;
+      }
+
+      .key-card-title {
+        font-size: 24px;
+        letter-spacing: -0.24px;
+      }
+
+      .key-card-desc {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+      }
+
+      .key-card-link span {
+        font-size: 16px;
+      }
+
+      .key-card-mockup {
+        height: auto;
+        aspect-ratio: 16/10;
+        border-width: 4px;
+        border-radius: 8px;
+      }
+
+      .key-card-visual {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* === HOW IT WORKS === */
+      .how-cards {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+      }
+
+      .how-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto;
+        padding: 0;
+        gap: 0;
+      }
+
+      .how-card-number {
+        font-size: 24px;
+      }
+
+      .how-card-content {
+        padding: 16px;
+      }
+
+      .how-card-title {
+        font-size: 24px;
+        letter-spacing: -0.24px;
+      }
+
+      .how-card-desc {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+      }
+
+      .how-card-visual {
+        height: auto;
+        min-height: 280px;
+      }
+
+      .how-card-visual .component-frame {
+        min-height: 280px;
+      }
+
+      /* === TESTIMONIALS === */
+      .testimonial-cards {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+      }
+
+      .testimonial-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+      }
+
+      .testimonial-image {
+        width: 100%;
+        height: 200px;
+      }
+
+      .testimonial-content {
+        padding: 16px;
+        gap: 20px;
+      }
+
+      .testimonial-quote {
+        font-size: 20px;
+        letter-spacing: -0.2px;
+      }
+
+      .testimonial-role {
+        font-size: 16px;
+      }
+
+      .testimonial-name {
+        font-size: 20px;
+      }
+
+      .testimonial-stat-value {
+        font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .testimonial-stat-label {
+        font-size: 16px;
+      }
+
+      /* === CTA SECTION === */
+      .cta-section {
+        padding: 40px 0;
+      }
+
+      .cta-inner {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 16px !important;
+      }
+
+      .cta-banner {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto;
+        padding: 40px 16px;
+      }
+
+      .cta-label {
+        font-size: 16px;
+      }
+
+      .cta-title {
+        font-size: 32px;
+        letter-spacing: -0.56px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .cta-buttons .btn-primary,
+      .cta-buttons .btn-secondary {
+        padding: 12px 24px;
+        font-size: 14px;
+      }
+
+      /* === FAQ SECTION === */
+      .faq-section {
+        padding: 40px 0;
+        gap: 40px;
+      }
+
+      .faq-inner {
+        padding: 0 16px;
+        gap: 40px;
+      }
+
+      .faq-list {
+        gap: 0;
+      }
+
+      .faq-item {
+        padding: 16px 0;
+      }
+
+      .faq-question-text {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+      }
+
+      .faq-answer {
+        font-size: 16px;
+        letter-spacing: -0.16px;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .faq-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* === INSIGHTS SECTION === */
+      .insights-section {
+        padding: 40px 0;
+        gap: 40px;
+      }
+
+      .insights-inner {
+        padding: 0;
+        gap: 32px;
+      }
+
+      .insights-header-wrapper {
+        padding: 0 16px;
+      }
+
+      .insights-title {
+        font-size: 32px;
+        letter-spacing: -0.64px;
+      }
+
+      .insights-grid {
+        flex-direction: row;
+        gap: 16px;
+        animation-duration: 25s;
+      }
+
+      .insight-card {
+        width: 280px;
+      }
+
+      .insight-image {
+        width: 280px;
+        height: 180px;
+      }
+
+      .insight-content {
+        width: 280px;
+        padding: 0;
+        gap: 12px;
+      }
+
+      .insight-desc {
+        font-size: 14px;
+        letter-spacing: -0.14px;
+      }
+
+      .insight-meta span {
+        font-size: 12px;
+      }
+
+      /* === FOOTER === */
+      .footer {
+        padding: 40px 0;
+        gap: 40px;
+      }
+
+      .footer-inner {
+        padding: 0 16px;
+        gap: 40px;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .footer-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .footer-left {
+        width: 100%;
+      }
+
+      .footer-brand {
+        width: 100%;
+        gap: 16px;
+      }
+
+      .footer-logo {
+        width: 130px;
+        height: 32px;
+      }
+
+      .footer-desc {
+        font-size: 14px;
+        max-width: 100%;
+      }
+
+      .footer-newsletter {
+        max-width: 100%;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-newsletter-input,
+      .footer-newsletter-btn {
+        width: 100%;
+      }
+
+      .footer-links {
+        width: 100% !important;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .footer-column {
+        width: 100%;
+      }
+
+      .footer-column-title {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+
+      .footer-link {
+        font-size: 14px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
+      }
+
+      .footer-bottom span {
+        font-size: 14px;
+      }
+
+      /* Hide decorative background elements on mobile */
+      .footer-bg,
+      .footer-bg-lines {
+        display: none;
+      }
+
+      .hero-bg {
+        min-width: unset;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+    }
+
+    /* ===================== SMALL MOBILE (< 375px) ===================== */
+    @media (max-width: 374px) {
+      .navbar-container {
+        width: 100%;
+        padding: 0 12px;
+      }
+
+      .hero-content {
+        width: calc(100% - 24px);
       }
 
       .hero-headline {
         font-size: 40px;
+        letter-spacing: -0.8px;
+      }
+
+      .hero-subtitle {
+        font-size: 13px;
       }
 
       .hero-buttons {
         flex-direction: column;
-        width: 100%;
+        gap: 12px;
       }
 
       .hero-buttons .btn-primary,
       .hero-buttons .btn-secondary {
         width: 100%;
-        text-align: center;
-      }
-
-      .hero-tabs {
-        display: none;
-      }
-
-      .hero-mockup {
-        width: calc(100% - 48px);
-      }
-
-      .section {
-        padding: 48px 24px;
-        gap: 40px;
-      }
-
-      .section-title {
-        font-size: 36px;
-      }
-
-      .how-cards {
-        flex-direction: column;
-      }
-
-      .how-card {
-        width: 100%;
-      }
-
-      .testimonial-stat {
-        font-size: 80px;
-      }
-
-      .cta-title {
-        font-size: 32px;
-      }
-
-      .insights-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .faq-question {
-        width: 100%;
-      }
-
-      .faq-answer {
-        width: 100%;
-      }
-
-      .footer {
-        height: auto;
-        padding: 60px 24px 40px;
-      }
-
-      .footer-links {
-        flex-wrap: wrap;
-        gap: 40px;
-      }
-
-      .footer-column {
-        width: calc(50% - 20px);
-      }
-    }
-
-    /* Small mobile: <390px */
-    @media (max-width: 389px) {
-      .hero-headline {
-        font-size: 32px;
+        padding: 12px 20px;
+        font-size: 14px;
       }
 
       .section-title {
         font-size: 28px;
+        letter-spacing: -0.56px;
       }
 
-      .testimonial-stat {
-        font-size: 60px;
+      .bento-card-title,
+      .key-card-title,
+      .how-card-title {
+        font-size: 20px;
       }
 
-      .cta-title {
-        font-size: 24px;
-      }
-
-      .footer-column {
-        width: 100%;
+      .bento-callout-title,
+      .cta-title,
+      .insights-title {
+        font-size: 28px;
       }
     }
 
+    /* ===================== RESPONSIVE IMAGE/ABSOLUTE POSITION FIXES ===================== */
+
+    /* Hide absolute positioned gradient ellipses on tablet and smaller */
+    @media (max-width: 1023px) {
+      .bento-callout-gradient {
+        display: none !important;
+      }
+
+      .cta-bg-ellipse {
+        display: none !important;
+      }
+
+      /* Deal management card - make image relative for stacking */
+      .bento-card-wide {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 24px !important;
+      }
+
+      .bento-card-wide .bento-card-deal-image {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 500px !important;
+        height: auto !important;
+        margin: 0 auto !important;
+      }
+
+      .bento-card-wide .bento-card-content {
+        text-align: center !important;
+        width: 100% !important;
+      }
+
+      /* CRM dashed border card responsive */
+      .bento-card-crm {
+        width: 100% !important;
+        max-width: 600px !important;
+        height: auto !important;
+        min-height: 400px !important;
+        padding: 40px 24px !important;
+      }
+
+      .bento-card-crm .bento-image {
+        width: 100% !important;
+        max-width: 350px !important;
+        height: auto !important;
+      }
+
+      /* Key advantage subtitle */
+      .key-advantage-header .section-subtitle {
+        width: 100% !important;
+        max-width: 500px !important;
+      }
+
+      /* Key card desc width */
+      .key-card-white .key-card-desc {
+        width: 100% !important;
+        max-width: 400px !important;
+      }
+
+      /* Section subtitle width overrides */
+      .section-subtitle {
+        width: 100% !important;
+        max-width: 550px !important;
+      }
+
+      /* Key card visual responsive */
+      .key-card-visual {
+        width: 100% !important;
+        max-width: 500px !important;
+        height: auto !important;
+      }
+    }
+
+    /* Make bento images responsive within their cards */
+    @media (max-width: 767px) {
+      .bento-image {
+        width: 100% !important;
+        max-width: 280px !important;
+        height: auto !important;
+        margin: 0 auto;
+      }
+
+      .bento-image img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      /* CRM dashed border card */
+      .bento-card-crm {
+        padding: 30px 20px !important;
+        min-height: 350px !important;
+      }
+
+      .bento-card-crm .bento-image {
+        max-width: 280px !important;
+      }
+
+      /* Bento card content widths */
+      .bento-card-lg .bento-card-content,
+      .bento-card-sm .bento-card-content,
+      .bento-card-wide .bento-card-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+      }
+
+      /* Section subtitle width overrides for mobile */
+      .section-subtitle {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Bento CRM card responsive */
+      .bento-card-crm {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 350px !important;
+        padding: 30px 20px !important;
+      }
+
+      /* Bento callout content and buttons */
+      .bento-callout-content {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      .bento-callout-buttons {
+        width: 100% !important;
+        max-width: 300px !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      /* Key card content width */
+      .key-card-content {
+        width: 100% !important;
+      }
+
+      .key-card-desc {
+        width: 100% !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMPONENT IFRAME STYLES
+       ═══════════════════════════════════════════════════════════════ */
+    .component-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      display: block;
+    }
+
+    /* Images and objects block card clicks, but iframes need interaction for hover animations */
+    .bento-card img,
+    .bento-card object {
+      pointer-events: none;
+    }
+
+    .bento-card .component-frame,
+    .bento-card iframe {
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 10;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="page" data-od-id="409:2977">
-    <!-- Hero Section -->
-    <section class="hero" data-od-id="409:2978">
-      <!-- Background decorative elements -->
-      <div class="hero-bg">
-        <img class="hero-bg-lines" src="figma-data/images/a6f03734584298e3888dcea1a7cf448da6116eb2.svg" alt="">
-      </div>
-
-      <!-- Navbar -->
-      <nav class="navbar" data-od-id="409:3020">
+    <!-- Floating Navbar Wrapper -->
+    <div class="navbar-wrapper">
+      <nav class="navbar" data-od-id="409:3020" data-theme="dark" role="navigation" aria-label="Main navigation" style="border-radius: 0px; height: 60px;">
         <div class="navbar-container">
           <div class="navbar-left">
-            <div class="logo" data-od-id="409:3022">
-              <img src="figma-data/images/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
-            </div>
+            <a href="dealspec-homepage.html" class="logo" data-od-id="409:3022">
+              <img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+            </a>
             <div class="nav-divider"></div>
             <div class="nav-links" data-od-id="409:3024">
-              <a href="#" class="nav-link">Home</a>
-              <a href="#" class="nav-link">
-                Software
-                <svg viewBox="0 0 7 4" fill="none">
-                  <path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-              <a href="#" class="nav-link">
-                Services
-                <svg viewBox="0 0 7 4" fill="none">
-                  <path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-              <a href="#" class="nav-link">
-                Unternehmen
-                <svg viewBox="0 0 7 4" fill="none">
-                  <path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-              <a href="#" class="nav-link">
-                Ressourcen
-                <svg viewBox="0 0 7 4" fill="none">
-                  <path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
+              <a href="dealspec-homepage.html" class="nav-link">Home</a>
+              <a href="software-overview.html" class="nav-link">Software <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+              <a href="#" class="nav-link">Services <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+              <a href="#" class="nav-link">Unternehmen <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+              <a href="#" class="nav-link">Ressourcen <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
             </div>
           </div>
           <div class="navbar-right">
             <a href="#" class="nav-login">Log In</a>
             <div class="nav-buttons">
               <button class="btn-ghost">Get in Touch</button>
-              <div class="btn-lang">
-                <img src="figma-data/images/67eb260f896fb52385d8a77d199101f392bd8a35.svg" alt="Language">
-              </div>
-              <button class="mobile-menu-btn" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-              </button>
+              <div class="btn-lang"><img src="assets/figma/67eb260f896fb52385d8a77d199101f392bd8a35.svg" alt="Language"></div>
             </div>
+            <button class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </nav>
+    </div>
 
-      <!-- Hero Content -->
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" aria-hidden="true"></div>
+
+    <!-- Mobile Menu Panel -->
+    <aside id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+      <div class="mobile-menu-header">
+        <a href="dealspec-homepage.html" class="logo">
+          <img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
+        </a>
+        <button class="mobile-menu-close" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="6" y1="18" x2="18" y2="6"></line>
+          </svg>
+        </button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="dealspec-homepage.html" class="mobile-menu-link">Home</a>
+        <a href="software-overview.html" class="mobile-menu-link">
+          Software
+          <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="mobile-menu-link">
+          Services
+          <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="mobile-menu-link">
+          Unternehmen
+          <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#" class="mobile-menu-link">
+          Ressourcen
+          <svg viewBox="0 0 7 4" fill="none"><path d="M1 1L3.5 3L6 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </nav>
+      <div class="mobile-menu-footer">
+        <button class="mobile-menu-cta">Get in Touch</button>
+        <button class="mobile-menu-login">Log In</button>
+      </div>
+    </aside>
+
+    <section class="hero" data-od-id="409:2978" data-theme="dark">
+      <img class="hero-bg" src="assets/backgrounds/bg-hero.png" alt="">
+
       <div class="hero-content" data-od-id="409:3049">
         <div class="hero-text" data-od-id="409:3050">
           <div class="hero-badge" data-od-id="409:3053">
-            <div class="hero-badge-logo">
-              <img src="figma-data/images/744e4f934bc64fdc56855bfc162a6af00d10bcfb.png" alt="">
-            </div>
+            <div class="hero-badge-logo"><img src="assets/images/key-advantage-mockup.png" alt=""></div>
             <span class="hero-badge-text">Get Started with Dealspec</span>
           </div>
           <h1 class="hero-headline" data-od-id="409:3056">10x your dealmaking.</h1>
-          <p class="hero-subtitle" data-od-id="409:3057">We offer solutions to improve the efficiency and quality of your deals through data & automation along core parts of the M&A process.</p>
+          <p class="hero-subtitle" data-od-id="409:3057">We offer solutions to improve the efficiency and quality of your deals through data &amp; automation along core parts of the M&amp;A process.</p>
         </div>
         <div class="hero-buttons" data-od-id="409:3058">
           <button class="btn-primary" data-od-id="409:3059">Get in Touch</button>
@@ -1643,215 +4072,271 @@
         </div>
       </div>
 
-      <!-- Hero Tabs -->
-      <div class="hero-tabs" data-od-id="409:3007">
-        <div class="hero-tab">Tab Title Here</div>
-        <div class="hero-tab">Tab Title Here</div>
-        <div class="hero-tab active">Tab Title Here</div>
-        <div class="hero-tab">Tab Title Here</div>
-        <div class="hero-tab">Tab Title Here</div>
+      <div class="hero-tabs-container" data-od-id="409:3007">
+        <div class="hero-tabs">
+          <!-- Tab set 1 -->
+          <div class="hero-tab" data-index="0">Pipeline Tracker</div>
+          <div class="hero-tab" data-index="1">Unified Dashboard</div>
+          <div class="hero-tab" data-index="2">AI Q&amp;A</div>
+          <div class="hero-tab" data-index="3">Deal overview</div>
+          <div class="hero-tab" data-index="4">Due Dilligence</div>
+          <div class="hero-tab" data-index="5">Financial Modeling</div>
+          <div class="hero-tab" data-index="6">CRM Integrated</div>
+          <!-- Tab set 2 (clone for infinite loop) -->
+          <div class="hero-tab" data-index="0">Pipeline Tracker</div>
+          <div class="hero-tab" data-index="1">Unified Dashboard</div>
+          <div class="hero-tab" data-index="2">AI Q&amp;A</div>
+          <div class="hero-tab" data-index="3">Deal overview</div>
+          <div class="hero-tab" data-index="4">Due Dilligence</div>
+          <div class="hero-tab" data-index="5">Financial Modeling</div>
+          <div class="hero-tab" data-index="6">CRM Integrated</div>
+          <!-- Tab set 3 (clone for infinite loop) -->
+          <div class="hero-tab" data-index="0">Pipeline Tracker</div>
+          <div class="hero-tab" data-index="1">Unified Dashboard</div>
+          <div class="hero-tab" data-index="2">AI Q&amp;A</div>
+          <div class="hero-tab active" data-index="3">Deal overview</div>
+          <div class="hero-tab" data-index="4">Due Dilligence</div>
+          <div class="hero-tab" data-index="5">Financial Modeling</div>
+          <div class="hero-tab" data-index="6">CRM Integrated</div>
+          <!-- Tab set 4 (clone for infinite loop) -->
+          <div class="hero-tab" data-index="0">Pipeline Tracker</div>
+          <div class="hero-tab" data-index="1">Unified Dashboard</div>
+          <div class="hero-tab" data-index="2">AI Q&amp;A</div>
+          <div class="hero-tab" data-index="3">Deal overview</div>
+          <div class="hero-tab" data-index="4">Due Dilligence</div>
+          <div class="hero-tab" data-index="5">Financial Modeling</div>
+          <div class="hero-tab" data-index="6">CRM Integrated</div>
+          <!-- Tab set 5 (clone for infinite loop) -->
+          <div class="hero-tab" data-index="0">Pipeline Tracker</div>
+          <div class="hero-tab" data-index="1">Unified Dashboard</div>
+          <div class="hero-tab" data-index="2">AI Q&amp;A</div>
+          <div class="hero-tab" data-index="3">Deal overview</div>
+          <div class="hero-tab" data-index="4">Due Dilligence</div>
+          <div class="hero-tab" data-index="5">Financial Modeling</div>
+          <div class="hero-tab" data-index="6">CRM Integrated</div>
+        </div>
       </div>
 
-      <!-- Hero Mockup -->
       <div class="hero-mockup" data-od-id="409:3063">
-        <img src="figma-data/images/1553935576692afad4c28c8fbc1273519c23dd9d.png" alt="Dealspec Dashboard">
+        <img src="assets/images/dashboard-pipeline.png" alt="Pipeline Tracker" data-tab-index="0">
+        <img src="assets/images/dashboard-unified.png" alt="Unified Dashboard" data-tab-index="1">
+        <img src="assets/images/dashboard-ai-qa.png" alt="AI Q&amp;A" data-tab-index="2">
+        <img src="assets/images/dashboard-deal-overview.webp" alt="Deal overview" data-tab-index="3" class="active">
+        <img src="assets/images/dashboard-pipeline.png" alt="Due Dilligence" data-tab-index="4">
+        <img src="assets/images/dashboard-unified.png" alt="Financial Modeling" data-tab-index="5">
+        <img src="assets/images/dashboard-ai-qa.png" alt="CRM Integrated" data-tab-index="6">
       </div>
 
-      <!-- Bottom gradient -->
       <div class="hero-bottom-gradient"></div>
     </section>
 
-    <!-- Client Logos -->
-    <section class="client-logos" data-od-id="409:3065">
-      <div class="client-logo">
-        <img src="figma-data/images/9c765257b06be19c93b707de4ea32d3a9dedde91.svg" alt="Client">
-      </div>
-      <div class="client-logo">
-        <img src="figma-data/images/bb558cacb5aa7fc7db10f6ead13a069be56a7b91.svg" alt="S&P Global">
-      </div>
-      <div class="client-logo">
-        <img src="figma-data/images/db17230c11df88131c508180f6f4ea0e322733d0.svg" alt="Client">
-      </div>
-      <div class="client-logo">
-        <img src="figma-data/images/33be1fc3f95b8acd7a2908d53b17a14be3301da2.svg" alt="Morgan Stanley">
-      </div>
-      <div class="client-logo">
-        <img src="figma-data/images/4f003ed4a29f7634838caea244ca67e71bc3bb13.svg" alt="Bloomberg">
-      </div>
-      <div class="client-logo">
-        <img src="figma-data/images/2e3c01f7c78fd5c13eed4614226fba58851ef420.svg" alt="Deloitte">
+    <section class="client-logos" data-od-id="409:3065" data-theme="light">
+      <div class="marquee-track">
+        <!-- First set -->
+        <div class="client-logos-inner">
+          <div class="client-logo"><img src="assets/logos/citi-logo.png" alt="Citi"></div>
+          <div class="client-logo"><img src="assets/logos/sp-global-logo.png" alt="S&amp;P Global"></div>
+          <div class="client-logo"><img src="assets/logos/kpmg-logo.png" alt="KPMG"></div>
+          <div class="client-logo"><img src="assets/logos/morgan-stanley-logo.png" alt="Morgan Stanley"></div>
+          <div class="client-logo"><img src="assets/logos/bloomberg-logo.png" alt="Bloomberg"></div>
+          <div class="client-logo"><img src="assets/logos/deloitte-logo.png" alt="Deloitte"></div>
+        </div>
+        <!-- Duplicate set for seamless loop -->
+        <div class="client-logos-inner">
+          <div class="client-logo"><img src="assets/logos/citi-logo.png" alt="Citi"></div>
+          <div class="client-logo"><img src="assets/logos/sp-global-logo.png" alt="S&amp;P Global"></div>
+          <div class="client-logo"><img src="assets/logos/kpmg-logo.png" alt="KPMG"></div>
+          <div class="client-logo"><img src="assets/logos/morgan-stanley-logo.png" alt="Morgan Stanley"></div>
+          <div class="client-logo"><img src="assets/logos/bloomberg-logo.png" alt="Bloomberg"></div>
+          <div class="client-logo"><img src="assets/logos/deloitte-logo.png" alt="Deloitte"></div>
+        </div>
       </div>
     </section>
 
-    <!-- Our Software Bento -->
-    <section class="section" data-od-id="413:18081">
-      <div class="section-header" data-od-id="413:18082">
-        <p class="section-label">Our Software</p>
-        <h2 class="section-title">Everything you need to<br>manage deals—in one place</h2>
-      </div>
-
-      <div class="bento-grid" data-od-id="413:18085">
+    <section class="section" data-od-id="413:18081" data-theme="light">
+      <div class="section-inner">
+        <div class="section-header" data-od-id="413:18082">
+          <p class="section-label">Our Software</p>
+          <h2 class="section-title">Everything you need to<br>manage deals—in one place</h2>
+        </div>
+        <div class="bento-grid" data-od-id="413:18085">
+        <!-- Row 1: Long List Creation (450px) + Document Management (730px) -->
         <div class="bento-row">
-          <div class="bento-card bento-card-sm" data-od-id="413:18087">
-            <div class="bento-image" style="width: 435px; height: 305px;">
-              <img src="figma-data/images/95fe30c729801b1a6303c7435194624ce33f8f51.png" alt="Long List Creation">
+          <a href="software-detail.html" class="bento-card bento-card-sm" data-od-id="413:18087" style="justify-content: space-between; text-decoration: none; color: inherit;">
+            <div class="bento-card-visual">
+              <iframe src="components/longlist-cards.html" class="component-frame" title="Long List Creation Animation"></iframe>
             </div>
-            <div class="bento-card-content">
+            <div class="bento-card-content" style="padding-top: 49px;">
               <h3 class="bento-card-title">Long List Creation</h3>
               <p class="bento-card-desc">We combine your deal specifics and preferences with real-time data to find relevant financial and strategic buyers.</p>
             </div>
-          </div>
-          <div class="bento-card bento-card-lg" data-od-id="413:18142">
-            <div class="bento-image" style="width: 543.5px; height: 359.5px;">
-              <img src="figma-data/images/eb4d586b94d795d6d8f8fe4a7df6a9d21eceebbd.png" alt="Document Management">
+          </a>
+          <a href="software-detail.html" class="bento-card bento-card-lg" data-od-id="413:18142" style="text-decoration: none; color: inherit;">
+            <div class="bento-card-visual">
+              <iframe src="components/document-management.html" class="component-frame" title="Document Management Animation"></iframe>
             </div>
-            <div class="bento-card-content" style="width: 370px;">
+            <div class="bento-card-content">
               <h3 class="bento-card-title">Document Management</h3>
               <p class="bento-card-desc">A secure, structured space to store, manage and access all documents - searchable and ready when you need it.</p>
             </div>
+          </a>
+        </div>
+        <!-- Row 2: Deal Management & Analytics (730px) + Seamless CRM & Tool Integration (450px, dashed blue) -->
+        <div class="bento-row">
+          <a href="software-detail.html" class="bento-card bento-card-wide" data-od-id="413:18209" style="position: relative; justify-content: flex-end; text-decoration: none; color: inherit;">
+            <div class="bento-card-content" style="text-align: left;">
+              <h3 class="bento-card-title">Deal Management<br>&amp; Analytics</h3>
+              <p class="bento-card-desc">Stay in control with deal dashboards that track key metrics as well as advanced analytical insights - in real-time.</p>
+            </div>
+            <img class="bento-card-deal-image" src="assets/figma/2d0e0aae39845746e05255f7e46950ceaae401cc.png" alt="Deal Management" style="position: absolute; left: 174px; top: 50%; transform: translateY(-50%); width: 599px; height: 496.5px; object-fit: cover; pointer-events: none;">
+          </a>
+          <a href="software-detail.html" class="bento-card bento-card-crm" data-od-id="413:18224" style="border: 2px dashed rgb(47, 78, 199); background: transparent; justify-content: center; flex-direction: column; text-decoration: none; color: inherit;">
+            <div class="bento-card-content" style="text-align: center; width: 100%;">
+              <h3 class="bento-card-title">Seamless CRM<br>&amp; Tool Integration</h3>
+              <p class="bento-card-desc">We integrate smoothly with leading CRMs, Office and Communication Tools - so your workflow stays connected.</p>
+            </div>
+            <div class="bento-image" style="width: 100%; height: 340px; display: flex; align-items: center; justify-content: center;">
+              <object data="components/seamless-crm.svg" type="image/svg+xml" style="width: 100%; height: 100%; max-width: 280px;"></object>
+            </div>
+          </a>
+        </div>
+        <!-- Row 3: Q&A Management (450px) + Centralized Data Flow (730px) -->
+        <div class="bento-row">
+          <a href="software-detail.html" class="bento-card bento-card-sm" data-od-id="413:18298" style="justify-content: space-between; text-decoration: none; color: inherit;">
+            <div class="bento-card-visual">
+              <iframe src="components/qa-management.html" class="component-frame" title="Q&amp;A Management Component"></iframe>
+            </div>
+            <div class="bento-card-content">
+              <h3 class="bento-card-title">Q&amp;A Management</h3>
+              <p class="bento-card-desc">Structure requests, responses, and stakeholder communication in one centralized diligence environment.</p>
+            </div>
+          </a>
+          <a href="software-detail.html" class="bento-card bento-card-lg" data-od-id="413:18333" style="justify-content: space-between; text-decoration: none; color: inherit;">
+            <div class="bento-card-visual">
+              <iframe src="components/centralized-flow.html" class="component-frame" title="Centralized Data Flow Component"></iframe>
+            </div>
+            <div class="bento-card-content">
+              <h3 class="bento-card-title">Centralized Data Flow</h3>
+              <p class="bento-card-desc">Connect public and private company information into one structured operational environment for better visibility and decision-making.</p>
+            </div>
+          </a>
+        </div>
+        <!-- Dark Callout: Need tailored support -->
+        <div class="bento-callout" data-od-id="413:18424">
+          <img src="assets/backgrounds/bg-callout.png" alt="" class="callout-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 0;">
+          <img src="assets/figma/e1be21f341f38b1917299935d49ce420527ea01b.png" alt="" class="bento-callout-image">
+          <div class="bento-callout-content">
+            <h3 class="bento-callout-title">Need tailored support for your operational workflows?</h3>
+            <div class="bento-callout-buttons">
+              <button class="btn-secondary">Get In Touch</button>
+              <button class="btn-primary">Explore Services</button>
+            </div>
+          </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="bento-row">
-          <div class="bento-card bento-card-wide" data-od-id="413:18209">
-            <div class="bento-card-icon">
-              <img src="figma-data/images/389a7fcb89b57c9e93c0043597d846e6986eae4b.png" alt="">
-            </div>
-            <div class="bento-card-content">
-              <h3 class="bento-card-title">Seamless CRM</h3>
-              <p class="bento-card-desc">Tailored M&A CRM capabilities that help you track relationships, manage pipelines, and stay organised throughout every deal cycle.</p>
-            </div>
+    <!-- Key Advantage Section -->
+    <section class="key-advantage-section" data-od-id="409:3563" data-theme="light" style="padding-right: 20px; padding-left: 20px;">
+      <div class="key-advantage-inner" style="padding-right: 0px; padding-left: 0px;">
+        <div class="key-advantage-wrapper" data-od-id="409:3564">
+        <div class="key-advantage-header">
+          <div class="section-header" data-od-id="409:3565">
+            <p class="section-label">Key Advantages</p>
+            <h2 class="section-title">Built for modern dealmaking</h2>
           </div>
-          <div class="bento-card bento-card-sm" data-od-id="413:18328">
-            <div class="bento-image" style="width: 435px; height: 305px;">
-              <img src="figma-data/images/2d0e0aae39845746e05255f7e46950ceaae401cc.png" alt="Reporting">
-            </div>
-            <div class="bento-card-content">
-              <h3 class="bento-card-title">Reporting</h3>
-              <p class="bento-card-desc">Automatically transform pipeline and deal activity data into professional investor-ready reports.</p>
-            </div>
-          </div>
+          <p class="section-subtitle">Access your deals, data, and insights—anytime, anywhere, with a platform designed for speed and clarity.</p>
         </div>
-
-        <div class="bento-row">
-          <div class="bento-card bento-card-sm" data-od-id="413:18381">
-            <div class="bento-image" style="width: 435px; height: 305px;">
-              <img src="figma-data/images/95e951b2a450c2e8d036b5b7d003b8a1b39795aa.png" alt="Stay on top">
+        <div class="key-advantage-cards" data-od-id="409:3570">
+          <div class="key-card-blue" data-od-id="409:3571" style="align-items: center;">
+            <div class="key-card-content" style="text-align: center; width: 100%;">
+              <h3 class="key-card-title">Stay on top of<br>every deal - anywhere</h3>
+              <p class="key-card-desc" style="width: 100%;">Access deal data, track progress, and receive real-time updates directly from your device.</p>
             </div>
-            <div class="bento-card-content">
-              <h3 class="bento-card-title">Stay on top of<br>every deal - anywhere</h3>
-              <p class="bento-card-desc">Handle all your tasks while on the go. Work on deals from any device with full access to pipeline, files, and updates.</p>
-            </div>
-          </div>
-          <div class="bento-card bento-card-lg" data-od-id="413:18095">
-            <div class="bento-image" style="width: 543.5px; height: 359.5px;">
-              <img src="figma-data/images/70038459812d97ce8264967aa663c6f5057eafee.png" alt="Data Room">
-            </div>
-            <div class="bento-card-content" style="width: 370px;">
-              <h3 class="bento-card-title">Data Room</h3>
-              <p class="bento-card-desc">A secure environment to share sensitive documents with controlled access during due diligence.</p>
+            <a href="#" class="key-card-link" data-od-id="409:3575">
+              <span>Learn More</span>
+              <img src="assets/figma/13cb6e9ed1c12933f1b852081940dc845e719587.svg" alt="">
+            </a>
+            <div class="key-card-mockup" data-od-id="409:3579">
+              <img src="assets/images/dashboard-pipeline.png" alt="Dealspec Dashboard">
             </div>
           </div>
-        </div>
-
-        <div class="bento-row">
-          <div class="bento-card bento-card-lg" data-od-id="413:18148">
-            <div class="bento-image" style="width: 543.5px; height: 359.5px;">
-              <img src="figma-data/images/652c66f4997542bede7ac72f34d6e26ac86fc447.png" alt="AI Assistance">
+          <div class="key-card-white" data-od-id="409:3580">
+            <div class="key-card-content">
+              <h3 class="key-card-title">Built for performance and scale</h3>
+              <p class="key-card-desc">Handle complex deal workflows with a reliable platform designed for high-performance environments.</p>
             </div>
-            <div class="bento-card-content" style="width: 370px;">
-              <h3 class="bento-card-title">AI Assistance</h3>
-              <p class="bento-card-desc">An AI assistant that helps you research companies, summarize documents and automate manual work.</p>
+            <div class="key-card-visual" data-od-id="8004:3849">
+              <img src="assets/figma/db4448e132aa8da23149ef6802b6a6fb8dee9160.png" alt="Performance">
             </div>
-          </div>
-          <div class="bento-card bento-card-sm" data-od-id="413:18201">
-            <div class="bento-image" style="width: 435px; height: 305px;">
-              <img src="figma-data/images/e1be21f341f38b1917299935d49ce420527ea01b.png" alt="Transactions">
-            </div>
-            <div class="bento-card-content">
-              <h3 class="bento-card-title">Transactions</h3>
-              <p class="bento-card-desc">Structured workflows that guide teams from early sourcing through deal closure with clear stages and tracking.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Key Advantage Section (Dark) -->
-    <section class="key-advantage" data-od-id="409:3563">
-      <div class="section-header">
-        <p class="section-label">Need tailored support for your</p>
-        <h2 class="section-title">operational workflows?</h2>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="section" data-od-id="409:6117">
-      <div class="section-header">
-        <p class="section-label">Built for modern dealmaking</p>
-        <h2 class="section-title">From fragmented data to<br>structured deal execution</h2>
-      </div>
-
-      <div class="key-advantage-cards">
-        <div class="key-card" data-od-id="409:6118">
-          <span class="key-card-number">01.</span>
-          <div class="key-card-visual">
-            <img src="figma-data/images/db4448e132aa8da23149ef6802b6a6fb8dee9160.png" alt="Connected Intelligence" style="width: 316px; height: 231px;">
+    <!-- How it works Section -->
+    <section class="section" data-od-id="409:6117" data-theme="light">
+      <div class="section-inner">
+        <div class="section-header" data-od-id="409:6118">
+          <p class="section-label">How it works</p>
+          <h2 class="section-title">From fragmented data to<br>structured deal execution</h2>
+        </div>
+        <div class="how-cards" data-od-id="409:6121">
+        <div class="how-card" data-od-id="409:6123">
+          <span class="how-card-number">01.</span>
+          <div class="how-card-visual">
+            <object type="image/svg+xml" data="components/security-compliance.svg" class="component-svg" style="width: 100%; height: 100%; min-height: 280px;"></object>
           </div>
-          <div class="key-card-content">
-            <h3 class="key-card-title">Connected Intelligence</h3>
-            <p class="key-card-desc">Turn scattered data into actionable insights through intelligent correlation and analysis.</p>
+          <div class="how-card-content" data-od-id="409:6128">
+            <h3 class="how-card-title" style="font-size: 21px;">Security &amp; Compliance</h3>
+            <p class="how-card-desc">Operate with confidence through secure infrastructure aligned with DSGVO and EU AI Act requirements.</p>
           </div>
         </div>
-
-        <div class="key-card" data-od-id="409:6139">
-          <span class="key-card-number">02.</span>
-          <div class="key-card-visual">
-            <img src="figma-data/images/2607102b0c72920c87f3228d1be290d89cb741cb.png" alt="Centralized Data" style="width: 316px; height: 231px;">
+        <div class="how-card" data-od-id="409:6145">
+          <span class="how-card-number">02.</span>
+          <div class="how-card-visual">
+            <iframe src="components/all-request-hiw.html" class="component-frame" loading="lazy"></iframe>
           </div>
-          <div class="key-card-content">
-            <h3 class="key-card-title">Centralized Data Foundation</h3>
-            <p class="key-card-desc">Combine public and private company data into one structured environment for improved visibility and consistency.</p>
+          <div class="how-card-content" data-od-id="409:6146">
+            <h3 class="how-card-title" style="font-size: 21px;">Centralized Data Foundation</h3>
+            <p class="how-card-desc">Combine public and private company data into one structured environment for improved visibility and consistency.</p>
           </div>
         </div>
-
-        <div class="key-card" data-od-id="409:6205">
-          <span class="key-card-number">03.</span>
-          <div class="key-card-visual">
-            <img src="figma-data/images/346f926b8fbec2e79fc1b3709d35072d1b696ebb.png" alt="Workflow Efficiency" style="width: 316px; height: 231px;">
+        <div class="how-card" data-od-id="409:6205">
+          <span class="how-card-number">03.</span>
+          <div class="how-card-visual">
+            <iframe src="components/workflow-efficiency.html" class="component-frame" loading="lazy"></iframe>
           </div>
-          <div class="key-card-content">
-            <h3 class="key-card-title">Workflow Efficiency</h3>
-            <p class="key-card-desc">Streamline sourcing, diligence, and execution workflows across the entire M&A value chain.</p>
+          <div class="how-card-content" data-od-id="409:6206" style="gap: 12px;">
+            <h3 class="how-card-title" style="font-size: 21px;">Workflow Efficiency</h3>
+            <p class="how-card-desc">Streamline sourcing, diligence, and execution workflows across the entire M&amp;A value chain.</p>
+          </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="section" data-od-id="409:6261">
-      <div class="section-header">
-        <div class="section-header">
+    <section class="section" data-od-id="409:6261" data-theme="light">
+      <div class="section-inner">
+        <div class="section-header" style="gap: 12px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
           <p class="section-label">Testimonials</p>
           <h2 class="section-title">Real results from deal teams</h2>
         </div>
-        <p class="section-subtitle">See how professionals streamline their M&A workflows with Dealspec.</p>
+        <p class="section-subtitle">See how professionals streamline their M&amp;A workflows with Dealspec.</p>
       </div>
-
       <div class="testimonials-grid">
         <div class="testimonial-card" data-od-id="409:6268">
-          <div class="testimonial-image">
-            <img src="figma-data/images/35fb3e570229393a40b5631ab68408e64d6edd24.png" alt="Richard R">
-          </div>
+          <div class="testimonial-image"><img src="assets/figma/35fb3e570229393a40b5631ab68408e64d6edd24.png" alt="Richard R"></div>
           <div class="testimonial-content">
             <p class="testimonial-quote">"Dealspec brings everything into one place. What used to take hours across spreadsheets and emails is now structured and easy to manage."</p>
             <div class="testimonial-footer">
               <div class="testimonial-author">
-                <div class="testimonial-logo">
-                  <img src="figma-data/images/64e60e0ab71799484666e24f5e735a2b3d1311b8.svg" alt="Company">
-                </div>
+                <div class="testimonial-logo"><img src="assets/figma/64e60e0ab71799484666e24f5e735a2b3d1311b8.svg" alt="Company"></div>
                 <div class="testimonial-author-info">
-                  <span class="testimonial-role">M&A Advisor</span>
+                  <span class="testimonial-role">M&amp;A Advisor</span>
                   <span class="testimonial-name">Richard R</span>
                 </div>
               </div>
@@ -1862,18 +4347,13 @@
             </div>
           </div>
         </div>
-
         <div class="testimonial-card" data-od-id="409:6284">
-          <div class="testimonial-image">
-            <img src="figma-data/images/6cd81accf697290e6e0897ca2f1d5483d34b9a17.png" alt="Laura M">
-          </div>
+          <div class="testimonial-image"><img src="assets/figma/6cd81accf697290e6e0897ca2f1d5483d34b9a17.png" alt="Laura M"></div>
           <div class="testimonial-content">
             <p class="testimonial-quote">"Having all deal data centralized improved how our team collaborates. Everyone works with the same information in real time."</p>
             <div class="testimonial-footer">
               <div class="testimonial-author">
-                <div class="testimonial-logo" style="width: 50px; height: 39px;">
-                  <img src="figma-data/images/a7faf0dd484f0bf6ce0adb6ec08968c8d6b2dab5.svg" alt="Company">
-                </div>
+                <div class="testimonial-logo" style="width: 50px; height: 39px;"><img src="assets/figma/a7faf0dd484f0bf6ce0adb6ec08968c8d6b2dab5.svg" alt="Company"></div>
                 <div class="testimonial-author-info">
                   <span class="testimonial-role">Transaction Manager</span>
                   <span class="testimonial-name">Laura M</span>
@@ -1886,178 +4366,162 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta-section" data-od-id="409:6302">
-      <div class="cta-banner" data-od-id="409:6303">
-        <div class="cta-bg">
-          <img src="figma-data/images/930fc0fbc3124e38d70cb83d984d8d47658cf5a3.svg" alt="" class="cta-bg-ellipse">
-        </div>
-        <div class="cta-content">
-          <div class="cta-text">
-            <p class="cta-label">Start your journey</p>
-            <h2 class="cta-title">Clarity for every deal. Confidence in every decision.</h2>
-          </div>
-          <div class="cta-buttons">
-            <button class="btn-primary">Book a demo</button>
-            <button class="btn-secondary">Talk to us</button>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section class="faq-section" data-od-id="409:6323">
-      <div class="section-header">
-        <div class="section-header">
-          <p class="section-label">FAQ</p>
-          <h2 class="section-title">Frequently asked questions</h2>
+    <section class="cta-section" data-od-id="409:6302" data-theme="dark">
+      <div class="cta-inner">
+        <div class="cta-banner" data-od-id="409:6303">
+          <div class="cta-bg"><img src="assets/backgrounds/bg-callout.png" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; z-index: 0;"></div>
+          <div class="cta-content">
+            <div class="cta-text">
+              <p class="cta-label">Start your journey</p>
+              <h2 class="cta-title">Clarity for every deal. Confidence in every decision.</h2>
+            </div>
+            <div class="cta-buttons">
+              <button class="btn-primary">Book a demo</button>
+              <button class="btn-secondary">Talk to us</button>
+            </div>
+          </div>
         </div>
-        <p class="section-subtitle">Learn more about how Dealspec supports structured deal workflows, operational efficiency, and scalable transaction management across your organization.</p>
       </div>
+    </section>
 
-      <div class="faq-list">
+    <section class="faq-section" data-od-id="409:6323" data-theme="light">
+      <div class="faq-inner">
+        <div class="section-header" style="gap: 12px;">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+            <p class="section-label">FAQ</p>
+            <h2 class="section-title">Frequently asked questions</h2>
+          </div>
+          <p class="section-subtitle">Learn more about how Dealspec supports structured deal workflows, operational efficiency, and scalable transaction management across your organization.</p>
+        </div>
+        <div class="faq-list">
         <div class="faq-item open" data-od-id="409:6330">
           <div class="faq-question">
             <span class="faq-question-text">What is Dealspec?</span>
-            <div class="faq-icon">
-              <img src="figma-data/images/0c1cb3c92862a850f4e64206aef9182820820c41.svg" alt="">
-            </div>
+            <div class="faq-icon"><img src="assets/figma/0c1cb3c92862a850f4e64206aef9182820820c41.svg" alt=""></div>
           </div>
-          <p class="faq-answer">Dealspec is an AI-powered M&A workflow platform designed to help teams streamline sourcing, due diligence, deal management, and operational execution within one structured environment.</p>
+          <p class="faq-answer">Dealspec is an AI-powered M&amp;A workflow platform designed to help teams streamline sourcing, due diligence, deal management, and operational execution within one structured environment.</p>
         </div>
-
         <div class="faq-item" data-od-id="409:6336">
           <div class="faq-question">
             <span class="faq-question-text">Who is Dealspec built for?</span>
-            <div class="faq-icon">
-              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
-            </div>
+            <div class="faq-icon"><img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt=""></div>
           </div>
         </div>
-
         <div class="faq-item" data-od-id="409:6341">
           <div class="faq-question">
             <span class="faq-question-text">Can Dealspec integrate with our existing tools?</span>
-            <div class="faq-icon">
-              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
-            </div>
+            <div class="faq-icon"><img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt=""></div>
           </div>
         </div>
-
         <div class="faq-item" data-od-id="409:6346">
           <div class="faq-question">
             <span class="faq-question-text">Does Dealspec support customizable workflows?</span>
-            <div class="faq-icon">
-              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
-            </div>
+            <div class="faq-icon"><img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt=""></div>
           </div>
         </div>
-
         <div class="faq-item" data-od-id="409:6351">
           <div class="faq-question">
             <span class="faq-question-text">How does Dealspec improve operational efficiency?</span>
-            <div class="faq-icon">
-              <img src="figma-data/images/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt="">
-            </div>
+            <div class="faq-icon"><img src="assets/figma/e17069e6b345d822634c985152e1c95ca6329a64.svg" alt=""></div>
+          </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Insights Section -->
-    <section class="insights-section" data-od-id="409:6356">
-      <div class="insights-header">
-        <div class="insights-label">
-          <div class="insights-dot"></div>
-          <span class="insights-label-text">Insights</span>
-        </div>
-        <h2 class="insights-title">Insights that drive<br>smarter dealmaking</h2>
-      </div>
-
-      <div class="insights-grid">
-        <div class="insight-card">
-          <div class="insight-image">
-            <img src="figma-data/images/85ff153e25477b6b93b0a18478614d1aaa0e51e7.png" alt="Insight 1">
-          </div>
-          <div class="insight-content">
-            <p class="insight-desc">Explore how automation and structured data are reshaping deal execution from sourcing to closing.</p>
-            <div class="insight-meta">
-              <span>Nov 24, 2025</span>
-              <span class="insight-meta-dot">•</span>
-              <span>12 mins</span>
+    <section class="insights-section" data-od-id="409:6356" data-theme="dark">
+      <div class="insights-inner">
+        <div class="insights-header-wrapper">
+          <div class="insights-header">
+            <div class="insights-label">
+              <div class="insights-dot"></div>
+              <span class="insights-label-text">Insights</span>
             </div>
+            <h2 class="insights-title">Insights that drive<br>smarter dealmaking</h2>
           </div>
         </div>
-
-        <div class="insight-card">
-          <div class="insight-image">
-            <img src="figma-data/images/f98991ba1eb64adece1dbd602c85e810390959c4.png" alt="Insight 2">
-          </div>
-          <div class="insight-content">
-            <p class="insight-desc">Learn how centralizing deal information improves speed, accuracy, and decision-making.</p>
-            <div class="insight-meta">
-              <span>Jan 05, 2026</span>
-              <span class="insight-meta-dot">•</span>
-              <span>5 mins</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="insight-card">
-          <div class="insight-image">
-            <img src="figma-data/images/d0db2ba4403651667b3d52638698ca1187cc0526.png" alt="Insight 3">
-          </div>
-          <div class="insight-content">
-            <p class="insight-desc">Discover how automation helps teams eliminate repetitive tasks and focus on high-value analysis.</p>
-            <div class="insight-meta">
-              <span>Jan 17, 2026</span>
-              <span class="insight-meta-dot">•</span>
-              <span>7 mins</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="insight-card">
-          <div class="insight-image">
-            <img src="figma-data/images/0f6247d12799416e568bb808cd5daff5cd8072b8.png" alt="Insight 4">
-          </div>
-          <div class="insight-content">
-            <p class="insight-desc">Why insights, not intuition, are becoming the foundation of successful transactions.</p>
-            <div class="insight-meta">
-              <span>Feb 20, 2026</span>
-              <span class="insight-meta-dot">•</span>
-              <span>15 mins</span>
-            </div>
+        <div class="insights-marquee-container">
+          <div class="insights-grid">
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/85ff153e25477b6b93b0a18478614d1aaa0e51e7.png" alt="Insight 1"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Explore how automation and structured data are reshaping deal execution from sourcing to closing.</p>
+                <div class="insight-meta"><span>Nov 24, 2025</span><span class="insight-meta-dot">•</span><span>12 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/f98991ba1eb64adece1dbd602c85e810390959c4.png" alt="Insight 2"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Learn how centralizing deal information improves speed, accuracy, and decision-making.</p>
+                <div class="insight-meta"><span>Jan 05, 2026</span><span class="insight-meta-dot">•</span><span>5 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/d0db2ba4403651667b3d52638698ca1187cc0526.png" alt="Insight 3"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Discover how automation helps teams eliminate repetitive tasks and focus on high-value analysis.</p>
+                <div class="insight-meta"><span>Jan 17, 2026</span><span class="insight-meta-dot">•</span><span>7 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/0f6247d12799416e568bb808cd5daff5cd8072b8.png" alt="Insight 4"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Why insights, not intuition, are becoming the foundation of successful transactions.</p>
+                <div class="insight-meta"><span>Feb 20, 2026</span><span class="insight-meta-dot">•</span><span>15 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/85ff153e25477b6b93b0a18478614d1aaa0e51e7.png" alt="Insight 1"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Explore how automation and structured data are reshaping deal execution from sourcing to closing.</p>
+                <div class="insight-meta"><span>Nov 24, 2025</span><span class="insight-meta-dot">•</span><span>12 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/f98991ba1eb64adece1dbd602c85e810390959c4.png" alt="Insight 2"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Learn how centralizing deal information improves speed, accuracy, and decision-making.</p>
+                <div class="insight-meta"><span>Jan 05, 2026</span><span class="insight-meta-dot">•</span><span>5 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/d0db2ba4403651667b3d52638698ca1187cc0526.png" alt="Insight 3"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Discover how automation helps teams eliminate repetitive tasks and focus on high-value analysis.</p>
+                <div class="insight-meta"><span>Jan 17, 2026</span><span class="insight-meta-dot">•</span><span>7 mins</span></div>
+              </div>
+            </a>
+            <a href="#" class="insight-card">
+              <div class="insight-image"><img src="assets/figma/0f6247d12799416e568bb808cd5daff5cd8072b8.png" alt="Insight 4"></div>
+              <div class="insight-content">
+                <p class="insight-desc">Why insights, not intuition, are becoming the foundation of successful transactions.</p>
+                <div class="insight-meta"><span>Feb 20, 2026</span><span class="insight-meta-dot">•</span><span>15 mins</span></div>
+              </div>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" data-od-id="409:6399">
-      <div class="footer-bg">
-        <img src="figma-data/images/645afcb2bfb5961945b434e9f5fe915b6b8f3f48.svg" alt="">
-      </div>
-
-      <div class="footer-content">
+    <footer class="footer" data-od-id="409:6399" data-theme="dark">
+      <img class="footer-bg" src="assets/figma/645afcb2bfb5961945b434e9f5fe915b6b8f3f48.svg" alt="">
+      <img class="footer-bg footer-bg-lines" src="assets/figma/586ab8abb1fc0a40bd076cf581546ebe0b0a5372.svg" alt="">
+      <div class="footer-inner">
+        <div class="footer-content">
         <div class="footer-left">
           <div class="footer-brand">
-            <div class="footer-logo">
-              <img src="figma-data/images/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec">
-            </div>
-            <p class="footer-desc">An AI-powered platform designed to streamline M&A workflows, centralize data, and support better deal decisions.</p>
+            <div class="footer-logo"><img src="assets/figma/ebe0c86ed4fe8bd15ec2d460de04ed8a6eb11717.png" alt="Dealspec"></div>
+            <p class="footer-desc">An AI-powered platform designed to streamline M&amp;A workflows, centralize data, and support better deal decisions.</p>
           </div>
           <div class="footer-newsletter">
             <input type="email" class="footer-newsletter-input" placeholder="Enter your email">
-            <button class="footer-newsletter-btn">
-              <img src="figma-data/images/9dd67efbabbd6099058bc5258c32d6468cad89b6.svg" alt="Submit">
-            </button>
+            <button class="footer-newsletter-btn"><img src="assets/figma/9dd67efbabbd6099058bc5258c32d6468cad89b6.svg" alt="Submit"></button>
           </div>
         </div>
-
         <div class="footer-links">
           <div class="footer-column">
             <h4 class="footer-column-title">Product</h4>
@@ -2068,7 +4532,6 @@
               <a href="#" class="footer-link">Pricing</a>
             </div>
           </div>
-
           <div class="footer-column">
             <h4 class="footer-column-title">Company</h4>
             <div class="footer-column-links">
@@ -2078,7 +4541,6 @@
               <a href="#" class="footer-link">Contact</a>
             </div>
           </div>
-
           <div class="footer-column">
             <h4 class="footer-column-title">Resources</h4>
             <div class="footer-column-links">
@@ -2088,7 +4550,6 @@
               <a href="#" class="footer-link">Case Studies</a>
             </div>
           </div>
-
           <div class="footer-column">
             <h4 class="footer-column-title">Connect</h4>
             <div class="footer-column-links">
@@ -2100,29 +4561,379 @@
           </div>
         </div>
       </div>
-
-      <div class="footer-bottom">
-        <span>© 2026 Dealspec. All right reserved</span>
-        <span>Privacy Policy</span>
-        <span>Terms of Service</span>
-        <span>Imprint</span>
+        <div class="footer-bottom">
+          <span>© 2026 Dealspec. All right reserved</span>
+          <a href="#" class="footer-bottom-link">Privacy Policy</a>
+          <a href="#" class="footer-bottom-link">Terms of Service</a>
+          <a href="#" class="footer-bottom-link">Imprint</a>
+        </div>
       </div>
     </footer>
   </div>
 
   <script>
-    const navbar = document.querySelector('.navbar');
+    (function() {
+      'use strict';
 
-    function handleScroll() {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
+      // ===================== NAVBAR SCROLL SYSTEM =====================
+      const navbar = document.querySelector('.navbar');
+      const navbarWrapper = document.querySelector('.navbar-wrapper');
+      let lastScrollY = 0;
+      let isHidden = false;
+      const hideThreshold = 100; // Start hiding after scrolling 100px
+
+      // Get all sections with data-theme attribute for theme detection (exclude navbar)
+      const themedSections = document.querySelectorAll('section[data-theme], footer[data-theme]');
+      let currentTheme = 'dark';
+
+      // Detect which section the navbar is over
+      // Use fixed detection point (60px from top) instead of actual navbar position
+      // because navbar may be transformed off-screen during auto-hide
+      function detectTheme() {
+        const detectionPoint = 60; // Fixed point ~center of navbar when visible
+
+        let detectedTheme = 'dark'; // default
+
+        for (const section of themedSections) {
+          const rect = section.getBoundingClientRect();
+          // Check if detection point is within this section
+          if (detectionPoint >= rect.top && detectionPoint <= rect.bottom) {
+            detectedTheme = section.dataset.theme || 'dark';
+            break;
+          }
+        }
+
+        // Only update if theme changed to avoid unnecessary reflows
+        if (detectedTheme !== currentTheme) {
+          currentTheme = detectedTheme;
+          navbar.dataset.theme = detectedTheme;
+        }
       }
-    }
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+      // Scroll handler - adds scrolled class, updates theme, and handles auto-hide
+      function handleScroll() {
+        const scrollY = window.scrollY;
+        const scrollDelta = scrollY - lastScrollY;
+
+        // Add/remove scrolled class
+        if (scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+
+        // Auto-hide logic: hide on scroll down, reveal on scroll up
+        if (scrollY > hideThreshold) {
+          if (scrollDelta > 0 && !isHidden) {
+            // Scrolling down - hide navbar
+            navbarWrapper.classList.add('hidden');
+            isHidden = true;
+          } else if (scrollDelta < 0 && isHidden) {
+            // Scrolling up - show navbar
+            navbarWrapper.classList.remove('hidden');
+            isHidden = false;
+          }
+        } else {
+          // Near top of page - always show
+          navbarWrapper.classList.remove('hidden');
+          isHidden = false;
+        }
+
+        lastScrollY = scrollY;
+
+        // Detect theme based on which section navbar is over
+        detectTheme();
+      }
+
+      // Throttled scroll listener
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            handleScroll();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Initial call
+      handleScroll();
+
+      // ===================== MOBILE MENU SYSTEM =====================
+      const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+      const mobileMenuClose = document.querySelector('.mobile-menu-close');
+
+      function openMenu() {
+        mobileMenuBtn.classList.add('is-active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
+        mobileMenuBtn.setAttribute('aria-label', 'Close menu');
+        mobileMenu.classList.add('is-active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileMenuOverlay.classList.add('is-active');
+        mobileMenuOverlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('menu-open');
+
+        // Focus trap - focus first link
+        const firstLink = mobileMenu.querySelector('.mobile-menu-link');
+        if (firstLink) firstLink.focus();
+      }
+
+      function closeMenu() {
+        mobileMenuBtn.classList.remove('is-active');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileMenuBtn.setAttribute('aria-label', 'Open menu');
+        mobileMenu.classList.remove('is-active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenuOverlay.classList.remove('is-active');
+        mobileMenuOverlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-open');
+
+        // Return focus to menu button
+        mobileMenuBtn.focus();
+      }
+
+      function toggleMenu() {
+        if (mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      }
+
+      // Event listeners
+      mobileMenuBtn.addEventListener('click', toggleMenu);
+      mobileMenuClose.addEventListener('click', closeMenu);
+      mobileMenuOverlay.addEventListener('click', closeMenu);
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        }
+      });
+
+      // Close menu on resize to desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 1023 && mobileMenu.classList.contains('is-active')) {
+          closeMenu();
+        }
+      });
+
+      // ===================== FAQ TOGGLE =====================
+      document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+          const item = question.parentElement;
+          item.classList.toggle('open');
+        });
+      });
+
+      // ===================== BENTO CARD IFRAME CLICK-THROUGH =====================
+      // Listen for postMessage from bento card iframes
+      window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'bento-card-click') {
+          // Find which iframe sent the message
+          const iframes = document.querySelectorAll('.bento-card iframe');
+          for (const iframe of iframes) {
+            if (iframe.contentWindow === event.source) {
+              const card = iframe.closest('.bento-card');
+              if (card && card.href) {
+                window.location.href = card.href;
+              }
+              break;
+            }
+          }
+        }
+      });
+
+      // ===================== HERO TABS INFINITE LOOP CAROUSEL =====================
+      (function() {
+        const tabsContainer = document.querySelector('.hero-tabs-container');
+        const heroTabs = document.querySelector('.hero-tabs');
+        const allTabs = document.querySelectorAll('.hero-tab');
+        if (!tabsContainer || !heroTabs || allTabs.length === 0) return;
+
+        const TABS_PER_SET = 7;    // Number of unique tabs
+        const TOTAL_SETS = 5;      // Number of cloned sets
+        const MIDDLE_SET = 2;      // Index of the middle set (0-indexed)
+
+        // Start from the middle of the middle set for infinite scroll room
+        let currentIndex = (MIDDLE_SET * TABS_PER_SET) + Math.floor(TABS_PER_SET / 2);
+        let autoSwipeInterval;
+        let isPaused = false;
+
+        // Calculate transform offset to center the active tab in the viewport
+        function centerActiveTab(index, animate = true) {
+          const tab = allTabs[index];
+          if (!tab) return;
+
+          // Temporarily disable transition for instant jump
+          if (!animate) {
+            heroTabs.style.transition = 'none';
+          }
+
+          // Get container (viewport) center
+          const containerWidth = tabsContainer.offsetWidth;
+          const containerCenter = containerWidth / 2;
+
+          // Get tab center position relative to the tabs track
+          const tabLeft = tab.offsetLeft;
+          const tabWidth = tab.offsetWidth;
+          const tabCenter = tabLeft + (tabWidth / 2);
+
+          // Calculate how much to translate the track
+          const translateX = containerCenter - tabCenter;
+          heroTabs.style.transform = `translateX(${translateX}px)`;
+
+          // Re-enable transition after the DOM updates
+          if (!animate) {
+            // Force reflow
+            heroTabs.offsetHeight;
+            requestAnimationFrame(() => {
+              heroTabs.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+          }
+        }
+
+        // Mockup images sync
+        const mockupImages = document.querySelectorAll('.hero-mockup img');
+
+        function updateMockupImage(tabIndex) {
+          // Get the actual tab index (0-6) from the infinite carousel index
+          const realIndex = tabIndex % TABS_PER_SET;
+
+          // Update mockup images
+          mockupImages.forEach(img => {
+            const imgTabIndex = parseInt(img.getAttribute('data-tab-index'));
+            if (imgTabIndex === realIndex) {
+              img.classList.add('active');
+            } else {
+              img.classList.remove('active');
+            }
+          });
+        }
+
+        function setActiveTab(index, animate = true) {
+          // Remove active from all
+          allTabs.forEach(tab => tab.classList.remove('active'));
+
+          // Add active to current
+          allTabs[index].classList.add('active');
+
+          // Center the active tab
+          centerActiveTab(index, animate);
+
+          // Sync mockup image
+          updateMockupImage(index);
+        }
+
+        function normalizeIndex(index) {
+          // If we've scrolled past the end of set 3 (index 28+), jump back to set 2
+          if (index >= (MIDDLE_SET + 1) * TABS_PER_SET + TABS_PER_SET) {
+            // Get the same position in the middle set
+            const positionInSet = index % TABS_PER_SET;
+            return (MIDDLE_SET * TABS_PER_SET) + positionInSet;
+          }
+          // If we've scrolled before the start of set 1, jump forward to set 2
+          if (index < TABS_PER_SET) {
+            const positionInSet = index % TABS_PER_SET;
+            return (MIDDLE_SET * TABS_PER_SET) + positionInSet;
+          }
+          return index;
+        }
+
+        function nextTab() {
+          currentIndex++;
+
+          // Check if we need to loop
+          if (currentIndex >= (MIDDLE_SET + 2) * TABS_PER_SET) {
+            // We've gone too far right - jump back to equivalent position in middle set
+            const positionInSet = currentIndex % TABS_PER_SET;
+            const jumpToIndex = (MIDDLE_SET * TABS_PER_SET) + positionInSet;
+
+            // First animate to current position
+            setActiveTab(currentIndex, true);
+
+            // After animation completes, instantly jump to middle set
+            setTimeout(() => {
+              currentIndex = jumpToIndex;
+              setActiveTab(currentIndex, false);
+            }, 650); // Slightly longer than animation duration
+          } else {
+            setActiveTab(currentIndex, true);
+          }
+        }
+
+        function startAutoSwipe() {
+          if (autoSwipeInterval) clearInterval(autoSwipeInterval);
+          autoSwipeInterval = setInterval(() => {
+            if (!isPaused) nextTab();
+          }, 3000);
+        }
+
+        function stopAutoSwipe() {
+          if (autoSwipeInterval) {
+            clearInterval(autoSwipeInterval);
+            autoSwipeInterval = null;
+          }
+        }
+
+        // Initialize - start from middle set
+        setActiveTab(currentIndex, false);
+        startAutoSwipe();
+
+        // Pause on hover
+        tabsContainer.addEventListener('mouseenter', () => {
+          isPaused = true;
+        });
+
+        tabsContainer.addEventListener('mouseleave', () => {
+          isPaused = false;
+        });
+
+        // Click to select tab - animate directly to clicked tab, then normalize
+        let isAnimating = false;
+        allTabs.forEach((tab, index) => {
+          tab.addEventListener('click', () => {
+            if (isAnimating || index === currentIndex) return;
+
+            isAnimating = true;
+            currentIndex = index;
+            setActiveTab(currentIndex, true);
+
+            // After animation completes, check if we need to normalize position
+            setTimeout(() => {
+              // If we've gone too far from the middle set, jump back silently
+              if (currentIndex >= (MIDDLE_SET + 2) * TABS_PER_SET || currentIndex < TABS_PER_SET) {
+                const positionInSet = currentIndex % TABS_PER_SET;
+                currentIndex = (MIDDLE_SET * TABS_PER_SET) + positionInSet;
+                setActiveTab(currentIndex, false);
+              }
+              isAnimating = false;
+            }, 650);
+
+            startAutoSwipe();
+          });
+        });
+
+        // Pause when page not visible
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            stopAutoSwipe();
+          } else {
+            startAutoSwipe();
+          }
+        });
+
+        // Recalculate on resize
+        window.addEventListener('resize', () => {
+          centerActiveTab(currentIndex, false);
+        });
+      })();
+
+    })();
   </script>
-</body>
-</html>
+
+</body></html>
